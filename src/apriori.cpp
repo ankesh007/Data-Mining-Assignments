@@ -7,6 +7,8 @@ using namespace std;
 #define pb push_back
 #define mp make_pair
 
+ofstream outdata;
+
 bool differByOne(vector<int> &list1, vector<int> &list2){
 	int k = list1.size();
 	for (int i=0; i< k-1; i++) if (list1[i] != list2[i]) return false;
@@ -32,22 +34,20 @@ void candidateGen(vvi &frequent, vector<pvii> &candidate){
 }
 
 void selectAndSaveFrequent(vector<pvii> &candidate, int threshold,vector<vector<int> > &frequent, string &outName){
-	ofstream outdata;
-	outdata.open(outName);
 
 	for (vector<pvii> :: iterator it = candidate.begin(); it != candidate.end(); it ++){
 		if ((it->second) >= threshold){
 			frequent.push_back(it->first);
 			for (vector<int> :: iterator it1 = (it->first).begin(); it1 != (it->first).end(); it1++){
-				outdata << *it1 << " ";
+				outdata << (*it1) << " ";
 			}
 			outdata << endl;
 		}
 	}
-	outdata.close()
+
 }
 
-void updateCount(string &inpFile, vector<pvii> &candidate){
+void updateCount(string &inpName, vector<pvii> &candidate){
 	string line;
 	int item;
 	ifstream myfile(inpName.c_str()); 
@@ -93,30 +93,33 @@ int init_pass(string &inpName, vector<pvii> &candidate,double k){
 	
 	for (map<int,int> :: iterator it = singleton.begin(); it != singleton.end(); it++){
 		vector<int> vec(1,it->first);
-		candidate.pb(mp(v, it->second));
+		candidate.pb(mp(vec, it->second));
 	}
 	return ceil((k/100.0)*totalTransactions);
 }
 
 void apriori(string &inpName, string &outName, double k){
 	vector<pvii> candidate;
-	int threshold = init_pass(inpFp, candidate, k);
+	int threshold = init_pass(inpName, candidate, k);
 
 	vvi frequent;
 	selectAndSaveFrequent(candidate, threshold, frequent, outName);
-	while(!frequent.isEmpty()){
+	while(frequent.size()!=0){
 		candidate.clear();
 		candidateGen(frequent, candidate);
-		updateCount(inpFile,candidate);
+		updateCount(inpName,candidate);
 		frequent.clear();
-		selectAndSaveFrequent(candidate,frequent,outName);
+		selectAndSaveFrequent(candidate,threshold,frequent,outName);
 	}
 }
 
-int main(){
+int main(int argc, char* argv[]){
 	boost
-	double k;
-	cin >> k;
-	apriori("inp", "out", k);
+	string s1(argv[1]);
+	string s2(argv[2]);
+	float  f = atof(argv[3]);
+	outdata.open(s2);
+	apriori(s1,s2,f);
+	outdata.close();
 	return 0;
 }
