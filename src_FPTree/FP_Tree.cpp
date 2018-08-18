@@ -70,10 +70,16 @@ void growFP_Tree(vi &itemset)
 		cur_node=next_node;
 		path_count[cur_node]++;
 	}
-	// #ifdef DEBUG
-		// cout<<"lelave"<<endl;
-		// cout<<TOTAL_NODES<<endl;
- 	// #endif
+}
+
+void printTree(int root)
+{
+	cout<<root<<" "<<path_count[root]<<" "<<node_to_item[root]<<endl;
+	for(auto itr:track_children_items[root])
+	{
+		cout<<itr.x<<" "<<itr.y<<endl;
+		printTree(itr.y);
+	}
 }
 
 void constructFP_Tree(char *filename)
@@ -207,7 +213,7 @@ map<int,int> global_counter; //maps modified item number to their count in condi
 map<int,int> new_header_helper;// stores filtered nodes
 map<int,int> reset_helper;// an auxillary map - can be removed potentially
 
-void reset_path(int node,vpii storeFP_counts)
+void reset_path(int node,vpii &storeFP_counts)
 {
 	int temp=path_count[node];
 	node=parent_node[node];
@@ -262,7 +268,7 @@ void dfs_mineFP(vi &conditional_leaves)
 	}
 
 	int newHeaderCount=0;
-	vi temp_nodes;
+	vi temp_nodes;//Stores item values
 
 	for(auto itr:global_counter)
 	{
@@ -328,6 +334,17 @@ void print_FrequentPatterns(char *filename)
 	}
 	write_output.close();
 }
+
+// void sumTree()
+// {
+// 	for(auto itr:header_table)
+// 	{
+// 		int sum=0;
+// 		for(auto itr2:itr)
+// 			sum+=path_count[itr2];
+// 		cout<<sum<<endl;
+// 	}
+// }
 
 int main(int argc,char **argv)
 {
