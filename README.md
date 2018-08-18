@@ -2,7 +2,7 @@
 
 To run FP_Tree:
 
-1. `cd src_FP_Tree`
+1. `cd src_FPTree`
 2. `make FP_Tree`
 3. `./FP_Tree <input_file> <X> <output_file>`
 
