@@ -15,11 +15,30 @@ bool differByOne(vector<int> &list1, vector<int> &list2){
 	return true;
 }
 
-bool binSearch(int start, int end, vector<int> &val, vector<int> &toCheck, vvi &frequent){
+int toComp(vector<int> &v1, vector<int> &v2){
+	int n = v1.size();
+	for (int i=0; i< n; i++){
+		if (v1[i] != v2[i]) return (v1[i]-v2[i]);
+	}
+	return 0;
+}
+
+bool binSearch(int start, int end, vector<int> &toCheck, vvi &frequent){
+	if (start >= end){
+		if (toComp(frequent[start], toCheck)==0) return true;
+		else return false;
+	}
 	int mid = (start+end)/2;
 	int midVal = toComp(frequent[mid],toCheck);
 	if (midVal == 0) return true;
-	else if (midVal < 0) 
+	else if (midVal < 0) return binSearch(mid+1, end, toCheck, frequent);
+	else return binSearch(start, mid-1, toCheck, frequent); 
+}
+
+void skipOneElement(vector<int> &arr, vector<int> &ans, int idx){
+	for (int i=0; i< arr.size(); i++){
+		if (i!= idx) ans.push_back(arr[i]);
+	}
 }
 
 void candidateGen(vvi &frequent, vector<pvii> &candidate){
@@ -30,20 +49,22 @@ void candidateGen(vvi &frequent, vector<pvii> &candidate){
 	for (int i= 0; i< n; i++){
 		for (int j = i+1; j < n; j++){
 			if (differByOne(frequent[i], frequent[j])){
-				// add in the candidate solution.
+				// Add in the candidate solution
 				vector<int> newList = frequent[i];
 				newList.push_back(frequent[j][k-1]);
+				// prune the ineligible sets	
 				
-				bool isEligible = false;
-				for (int j1 = 0; (j1 < newList.size()-2) && isEligible; j1++){
+				bool isEligible = true;
+				for (int x = 0; (x < newList.size()-2) && isEligible; x++){
 					vector<int> toCheck;
+					skipOneElement(newList,toCheck,x);
 					if (!binSearch(0,frequent.size()-1,toCheck,frequent)) isEligible = false;
 				}
-				candidate.pb(mp(newList,0));
+				if (isEligible) candidate.pb(mp(newList,0));
 			}
 			else break; // because sorted list
 		}
-	}	
+	}
 }
 
 void selectAndSaveFrequent(vector<pvii> &candidate, int threshold,vector<vector<int> > &frequent){

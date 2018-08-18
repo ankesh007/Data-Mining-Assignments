@@ -22,7 +22,7 @@ vi prefix_frequent_itemset;
 
 void calculate_support()
 {
-	double count=CUT_OFF_PERCENT*TOTAL_TRANSACTIONS;
+	double count= CUT_OFF_PERCENT*TOTAL_TRANSACTIONS;
 	count/=100;
 	REQUIRED_SUPPORT_COUNT=ceil(count);
 }
