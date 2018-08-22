@@ -122,7 +122,7 @@ int init_pass(string &inpName, vector<pvii> &candidate,double k){
 		}
 	}
 	myfile.close();
-	cout << singleton.size() << " " << totalTransactions << endl;
+	//cout << singleton.size() << " " << totalTransactions << endl;
 	for (map<int,int> :: iterator it = singleton.begin(); it != singleton.end(); it++){
 		vector<int> vec(1,it->first);
 		candidate.pb(mp(vec, it->second));
@@ -138,7 +138,7 @@ void apriori(string &inpName, double k){
 	selectAndSaveFrequent(candidate, threshold, frequent);
 	int temp;
 	while(frequent.size()!=0){
-		cout << temp++ << " " << frequent.size() << endl;
+		//cout << temp++ << " " << frequent.size() << endl;
 		candidate.clear();
 		candidateGen(frequent, candidate);
 		updateCount(inpName,candidate);

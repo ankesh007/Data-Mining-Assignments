@@ -74,10 +74,10 @@ void growFP_Tree(vi &itemset)
 
 void printTree(int root)
 {
-	cout<<root<<" "<<path_count[root]<<" "<<node_to_item[root]<<endl;
+	//cout<<root<<" "<<path_count[root]<<" "<<node_to_item[root]<<endl;
 	for(auto itr:track_children_items[root])
 	{
-		cout<<itr.x<<" "<<itr.y<<endl;
+		//cout<<itr.x<<" "<<itr.y<<endl;
 		printTree(itr.y);
 	}
 }
@@ -126,7 +126,7 @@ void constructFP_Tree(char *filename)
 	read_input.close();
 	calculate_support();
 	#ifdef DEBUG
-		cout<<"First Pass Over"<<endl;
+		//cout<<"First Pass Over"<<endl;
  	#endif
 
 /*
@@ -144,7 +144,7 @@ void constructFP_Tree(char *filename)
 		TOTAL_ITEMS++;
 	}
 	#ifdef DEBUG
-		cout<<"Filtering Over"<<endl;
+		//cout<<"Filtering Over"<<endl;
  	#endif
 
 
@@ -186,17 +186,17 @@ void constructFP_Tree(char *filename)
 	    sort(itemset.begin(),itemset.end(),COMPARATOR2);
 
     #ifdef DEBUG
-		cout<<"Begin grow"<<endl;
+		//cout<<"Begin grow"<<endl;
 	#endif
 	    growFP_Tree(itemset);
     #ifdef DEBUG
-		cout<<"End Grow"<<endl;
+		//cout<<"End Grow"<<endl;
 	#endif
     }
 
 	read_input.close();
 	#ifdef DEBUG
-		cout<<"Second pass over"<<endl;
+		//cout<<"Second pass over"<<endl;
  	#endif
 }
 
@@ -321,14 +321,14 @@ void dfs_mineFP(vi &conditional_leaves)
 void mine_FrequentPatterns()
 {
 	#ifdef DEBUG
-		cout<<"Hey"<<endl;
+		//cout<<"Hey"<<endl;
  	#endif
 	prefix_frequent_itemset.resize(TOTAL_ITEMS);
 
 	for(int i=TOTAL_ITEMS-1;i>=0;i--)
 	{
 	#ifdef DEBUG
-		cout<<i<<endl;
+		//cout<<i<<endl;
  	#endif
 		prefix_frequent_itemset[idx]=i;
 		idx++;
@@ -359,7 +359,7 @@ void print_FrequentPatterns(char *filename)
 // 		int sum=0;
 // 		for(auto itr2:itr)
 // 			sum+=path_count[itr2];
-// 		cout<<sum<<endl;
+// 		//cout<<sum<<endl;
 // 	}
 // }
 
@@ -368,15 +368,15 @@ int main(int argc,char **argv)
 	CUT_OFF_PERCENT=atof(argv[2]);
 	constructFP_Tree(argv[1]);
 #ifdef SIMPLE_DEBUG
-	cout<<"Constructed FP Tree"<<endl;
+	//cout<<"Constructed FP Tree"<<endl;
 #endif
 	mine_FrequentPatterns();
 #ifdef SIMPLE_DEBUG
-	cout<<"Mined FP"<<endl;
+	//cout<<"Mined FP"<<endl;
 #endif
 	print_FrequentPatterns(argv[3]);
 #ifdef SIMPLE_DEBUG
-	cout<<"End"<<endl;
+	//cout<<"End"<<endl;
 #endif
 	return 0;
 }
