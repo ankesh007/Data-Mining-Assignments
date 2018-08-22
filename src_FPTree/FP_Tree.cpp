@@ -236,7 +236,7 @@ void reset_path(int node,vpii &storeFP_counts)
 	}
 }
 
-void createHeaderTable(int node,vvi &newHeaderTable)
+void createHeaderTable(int node,vvi &newHeaderTable,vpii &storeFP_parents)
 {
 	node=parent_node[node];
 	while(node)
@@ -248,6 +248,16 @@ void createHeaderTable(int node,vvi &newHeaderTable)
 			{
 				reset_helper[node]=1;
 				newHeaderTable[x].pb(node);
+				int temp=parent_node[node];
+				while(temp && new_header_helper.find(node_to_item[temp])==new_header_helper.end())
+				{
+					temp=parent_node[temp];
+				}
+				if(temp!=parent_node[node])
+				{
+					storeFP_parents.pb({node,parent_node[node]});
+					parent_node[node]=temp;
+				}
 			}
 		}
 		node=parent_node[node];
@@ -259,6 +269,8 @@ void dfs_mineFP(vi &conditional_leaves)
 	augmentFP_set();
 
 	vpii storeFP_counts;
+	vpii storeFP_parents;
+
 	global_counter.clear();
 	new_header_helper.clear();
 	reset_helper.clear();
@@ -285,7 +297,7 @@ void dfs_mineFP(vi &conditional_leaves)
 	reset_helper.clear();
 	for(auto itr:conditional_leaves)
 	{
-		createHeaderTable(itr,newHeaderTable);
+		createHeaderTable(itr,newHeaderTable,storeFP_parents);
 	}
 	int x=newHeaderTable.size();
 	for(int i=x-1;i>=0;i--)
@@ -299,6 +311,10 @@ void dfs_mineFP(vi &conditional_leaves)
 	for(auto itr:storeFP_counts)
 	{
 		path_count[itr.x]=itr.y;
+	}
+	for(auto itr:storeFP_parents)
+	{
+		parent_node[itr.x]=itr.y;
 	}
 }
 

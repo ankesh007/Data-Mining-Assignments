@@ -38,4 +38,4 @@ relative/path/to/dir/anotherfile
 *ignore/
 !*Makefile
 .DS_Store
-src_FPTree/output.txt
+src_FPTree/*.txt
