@@ -205,8 +205,9 @@ void augmentFP_set()
 	vi frequent_item;
 	int x=frequent_patterns.size();
 	frequent_patterns.pb(frequent_item);
+	frequent_patterns[x].resize(idx);
 	for(int i=0;i<idx;i++)
-		frequent_patterns[x].pb(prefix_frequent_itemset[i]);	
+		frequent_patterns[x][i]=prefix_frequent_itemset[i];	
 }
 
 map<int,int> global_counter; //maps modified item number to their count in conditional tree
