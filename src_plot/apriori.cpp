@@ -149,11 +149,26 @@ void apriori(string &inpName, double k){
 
 int main(int argc, char* argv[]){
 	boost
+	clock_t t1, t2;
+	t1 = clock();
 	string s1(argv[1]);
 	string s2(argv[2]);
 	double f = atof(argv[3]);
 	outdata.open(s2);
 	apriori(s1,f);
 	outdata.close();
+	t2 = clock();
+	double time_taken = ((double) (t2 - t1)) / CLOCKS_PER_SEC;
+
+	ofstream outfile;
+	if (atoi(argv[4])==1)
+	{
+		outfile.open("time_apriori");
+	}
+	else{
+		outfile.open("time_apriori", ios_base::app);
+	}
+	outfile<<time_taken<<endl;
+	outfile.close();
 	return 0;
 }

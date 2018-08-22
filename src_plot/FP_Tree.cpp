@@ -205,9 +205,8 @@ void augmentFP_set()
 	vi frequent_item;
 	int x=frequent_patterns.size();
 	frequent_patterns.pb(frequent_item);
-	frequent_patterns[x].resize(idx);
 	for(int i=0;i<idx;i++)
-		frequent_patterns[x][i]=prefix_frequent_itemset[i];	
+		frequent_patterns[x].pb(prefix_frequent_itemset[i]);	
 }
 
 map<int,int> global_counter; //maps modified item number to their count in conditional tree
@@ -349,6 +348,8 @@ void print_FrequentPatterns(char *filename)
 
 int main(int argc,char **argv)
 {
+	clock_t t1, t2;
+	t1 = clock();
 	CUT_OFF_PERCENT=atof(argv[2]);
 	constructFP_Tree(argv[1]);
 #ifdef SIMPLE_DEBUG
@@ -362,5 +363,18 @@ int main(int argc,char **argv)
 #ifdef SIMPLE_DEBUG
 	cout<<"End"<<endl;
 #endif
+	t2 = clock();
+	double time_taken = ((double) (t2 - t1)) / CLOCKS_PER_SEC;
+
+	ofstream outfile;
+	if (atoi(argv[4])==1)
+	{
+		outfile.open("time_fptree");
+	}
+	else{
+		outfile.open("time_fptree", ios_base::app);
+	}
+	outfile<<time_taken<<endl;
+	outfile.close();
 	return 0;
 }
