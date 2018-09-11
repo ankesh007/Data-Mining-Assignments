@@ -1,0 +1,8 @@
+1: compile.sh : Line 3 - Added "-std=c++11"
+Compilation in g++ 5.x environment requires setting this c++11 standard
+
+2: compile.sh : Line 4 - Added "-std=c++11"
+Compilation in g++ 5.x environment requires setting this c++11 standard
+
+3: fptree.cpp : Line 76 - Added "pair<int, int>" in grater<> comparator
+Compilation in g++ 5.x environment requires to pass datatype in comparator argument while g++ 7.3 (My Machine) did not require it

@@ -6,14 +6,14 @@ int REQUIRED_SUPPORT_COUNT=0;
 int TOTAL_ITEMS=0;
 int TOTAL_NODES=0;
 
-map<int,int> item_idx;
+unordered_map<int,int> item_idx;
 vector<int> idx_item;
 
 vvi frequent_patterns;//final Answer
 
 vi path_count; // Keeps count of Number of paths through this item
 vi node_to_item;
-vector<map<int,int> > track_children_items;  // Keeps track of all children of node - maps item to Node Number
+vector<unordered_map<int,int> > track_children_items;  // Keeps track of all children of node - unordered_maps item to Node Number
 vector<int> parent_node;
 vvi header_table;
 
@@ -87,7 +87,7 @@ void constructFP_Tree(char *filename)
 	string line;
 	vpii count_Transactions;
 	vi local_idx_item;
-	map<int,int> local_item_idx;
+	unordered_map<int,int> local_item_idx;
 	int temp_count=-1;
 
 /*
@@ -210,9 +210,9 @@ void augmentFP_set()
 		frequent_patterns[x][i]=prefix_frequent_itemset[i];	
 }
 
-map<int,int> global_counter; //maps modified item number to their count in conditional tree
-map<int,int> new_header_helper;// stores filtered nodes
-map<int,int> reset_helper;// an auxillary map - can be removed potentially
+unordered_map<int,int> global_counter; //unordered_maps modified item number to their count in conditional tree
+unordered_map<int,int> new_header_helper;// stores filtered nodes
+unordered_map<int,int> reset_helper;// an auxillary unordered_map - can be removed potentially
 
 void reset_path(int node,vpii &storeFP_counts)
 {
