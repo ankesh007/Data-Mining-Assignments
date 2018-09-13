@@ -1,0 +1,2 @@
+1: 2015TT10917.sh, compile.sh : removed 'javac Test.java' from 2015TT10917.sh, added 'javac Test.java' to compile.sh
+'Can't open compile.sh' - Earlier, compilation was being done by 2015TT10917.sh only and compile.sh file was missing. Made a seperate file 'compile.sh' for compilation. 

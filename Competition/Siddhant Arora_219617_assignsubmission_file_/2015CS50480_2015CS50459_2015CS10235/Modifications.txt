@@ -1,0 +1,6 @@
+1:Makefile: added --std=c++11 in compilation of both files
+We used some features which are only applicable in stdc++ 11
+2:2015CS50480.sh:13-18
+Added part for running aprioiri to generate graph in result2.png
+3:2015CS50480.sh:20,23
+forgot to add 2 fi necessary for bash syntax

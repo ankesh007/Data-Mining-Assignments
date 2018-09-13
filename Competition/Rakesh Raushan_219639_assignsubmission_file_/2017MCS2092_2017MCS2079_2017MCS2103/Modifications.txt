@@ -1,0 +1,5 @@
+1:./FP_Tree/fptree.h:Added a header "#include <cmath>"
+Compilation failed because cmath library was not included. But, on our linux system with configuration - ubuntu 16.04 LTS, g++ version 5.4.0 including algorithm stl library("#include <algorithm>") suffices for cmath.
+
+2:./F_Plot/fptree.h:Added a header "#include <cmath>"
+Compilation failed because cmath library was not included. 
