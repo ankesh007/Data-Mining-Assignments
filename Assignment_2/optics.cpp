@@ -74,14 +74,12 @@ float getCoreDist(int root, vector<int> &nbr){
 
 void updateReachability(vector<int> &nbr, int root, priority_queue<pfi, vector<pfi>, greater<pfi> > &pq){
 	float coreDist = getCoreDist(root, nbr);
-	if (root==0) cout << coreDist << "==" << endl;
 	int n = nbr.size();
 	for (int i=0; i< n; i++){
 		int node = nbr[i];
 		if (!isProcessed[node]){
 			float currReachDist = max(coreDist, calculateDist(node, root));
 			reachabilityDist[node] = (reachabilityDist[node]==-1)? currReachDist: min(reachabilityDist[node], currReachDist);
-			cout << root << " " << node << " " << currReachDist << endl;
 			pq.push(mp(reachabilityDist[node], node));
 		}
 	}
@@ -104,13 +102,11 @@ void optics(){
 			
 			vector <int> nbr;
 			getNbr(i,nbr);
-			if (i==0) cout << nbr.size() << endl;
 			if (nbr.size() >= minNumOfPts){
 				priority_queue <pfi, vector<pfi>, greater<pfi> > pq;
 				updateReachability(nbr, i, pq);
 				while (!pq.empty()){
 					int node = pq.top().second;
-					// if (i==0) cout << "*" << node << endl;
 					pq.pop();
 					if (isProcessed[node]) continue;
 					isProcessed[node] = true;
@@ -143,7 +139,6 @@ int main(int argc, char *argv[]){
 	eps = atof(argv[2]);
 	minNumOfPts = atoi(argv[3]);
 	optics();
-	cout << calculateDist(0,68) << ":" << calculateDist(0,12) << endl;
 	output(argv[4]);
 	return 0;
 }
