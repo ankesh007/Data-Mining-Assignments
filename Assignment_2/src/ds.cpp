@@ -52,6 +52,9 @@ void init_ds(int dimension,int instances,float epsilon)
 		}
 		case 2:
 		{
+			vector<value_2> values;
+			values.resize(inst);
+
 			for(int i=0;i<inst;i++)
 			{
 				point_2 p,q;
@@ -65,12 +68,18 @@ void init_ds(int dimension,int instances,float epsilon)
 				p.set<1>(point_collection[i][1]);
 				q.set<1>(point_collection[i][1]);
 				box_2 b(p,q);
-				rtree_2.insert(mp(b,i));
+				values[i]=(mp(b,i));
 			}
+			bgi::rtree< value_2, bgi::rstar<16> > rtreer(values);
+			rtree_2=rtreer;
+
 			break;
 		}
 		case 3:
 		{
+			vector<value_3> values;
+			values.resize(inst);
+
 			for(int i=0;i<inst;i++)
 			{
 				point_3 p,q;
@@ -86,12 +95,17 @@ void init_ds(int dimension,int instances,float epsilon)
 				p.set<2>(point_collection[i][2]);
 				q.set<2>(point_collection[i][2]);
 				box_3 b(p,q);
-				rtree_3.insert(mp(b,i));
+				values[i]=(mp(b,i));
 			}
+			bgi::rtree< value_3, bgi::rstar<16> > rtreer(values);
+			rtree_3=rtreer;			
+
 			break;
 		}
 		case 4:
 		{
+			vector<value_4> values;
+			values.resize(inst);
 			for(int i=0;i<inst;i++)
 			{
 				point_4 p,q;
@@ -109,12 +123,17 @@ void init_ds(int dimension,int instances,float epsilon)
 				p.set<3>(point_collection[i][3]);
 				q.set<3>(point_collection[i][3]);
 				box_4 b(p,q);
-				rtree_4.insert(mp(b,i));
+				// rtree_4.insert(mp(b,i));
+				values[i]=(mp(b,i));				
 			}
+			bgi::rtree< value_4, bgi::rstar<16> > rtreer(values);
+			rtree_4=rtreer;
 			break;
 		}
 		case 5:
 		{
+			vector<value_5> values;
+			values.resize(inst);
 			for(int i=0;i<inst;i++)
 			{
 				point_5 p,q;
@@ -135,8 +154,10 @@ void init_ds(int dimension,int instances,float epsilon)
 				q.set<4>(point_collection[i][4]);
 
 				box_5 b(p,q);
-				rtree_5.insert(mp(b,i));
+				values[i]=(mp(b,i));
 			}
+			bgi::rtree< value_5, bgi::rstar<16> > rtreer(values);
+			rtree_5=rtreer;
 			break;
 		}
 	}
