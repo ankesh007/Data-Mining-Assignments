@@ -119,6 +119,7 @@ void print_results(){
 
 	for (l = 0; l < num_cluster; l++)
 	{
+		cout<<"clusters"<<num_cluster<<endl;
 		myfile<<"#"<<l<<endl;
 		int num_pts = ass[l].size();
 		for (i = 0; i < num_pts; i++)
