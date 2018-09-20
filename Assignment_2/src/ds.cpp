@@ -18,6 +18,8 @@ int inst=0;
 int dim=0;
 float eps_2;
 
+vector<pair<float,int> > for_one;
+
 void init_ds(int dimension,int instances,float epsilon)
 {
 	eps=epsilon;
@@ -29,19 +31,23 @@ void init_ds(int dimension,int instances,float epsilon)
 	{
 		case 1:
 		{
+			// for(int i=0;i<inst;i++)
+			// {
+			// 	point_1 p,q;
+			// 	p.set<0>(point_collection[i][0]);
+			// 	q.set<0>(point_collection[i][0]);
+			// 	// for(int j=0;j<dim;j++)
+			// 	// {
+			// 	// 	p.set<j>(point_collection[i][j]);
+			// 	// 	q.set<j>(point_collection[i][j]);
+			// 	// }
+			// 	box_1 b(p,q);
+			// 	rtree_1.insert(mp(b,i));
+			// }
+			for_one.resize(inst);
 			for(int i=0;i<inst;i++)
-			{
-				point_1 p,q;
-				p.set<0>(point_collection[i][0]);
-				q.set<0>(point_collection[i][0]);
-				// for(int j=0;j<dim;j++)
-				// {
-				// 	p.set<j>(point_collection[i][j]);
-				// 	q.set<j>(point_collection[i][j]);
-				// }
-				box_1 b(p,q);
-				rtree_1.insert(mp(b,i));
-			}
+				for_one[i]=mp(point_collection[i][0],i);
+			sort(for_one.begin(),for_one.end());
 			break;
 		}
 		case 2:
@@ -155,23 +161,30 @@ void query_ds(int index,vector<int> &neighbour)
 	{
 		case 1:
 		{
-			result_1.clear();
-			point_1 p,q;
-			// for(int j=0;j<dim;j++)
-			// {
-			// 	p.set<j>(point_collection[index][j]-eps);
-			// 	q.set<j>(point_collection[index][j]+eps);
-			// }
-			p.set<0>(point_collection[index][0]-eps);
-			q.set<0>(point_collection[index][0]+eps);
-			rtree_1.query(bgi::intersects(box_1(p, q)), std::back_inserter(result_1));
+			// result_1.clear();
+			// point_1 p,q;
+			// // for(int j=0;j<dim;j++)
+			// // {
+			// // 	p.set<j>(point_collection[index][j]-eps);
+			// // 	q.set<j>(point_collection[index][j]+eps);
+			// // }
+			// p.set<0>(point_collection[index][0]-eps);
+			// q.set<0>(point_collection[index][0]+eps);
+			// rtree_1.query(bgi::intersects(box_1(p, q)), std::back_inserter(result_1));
 
-			for(auto itr:result_1)
+			// for(auto itr:result_1)
+			// {
+			// 	if(getL2(itr.y,index)>eps_2)
+			// 		continue;
+			// 	else
+			// 		neighbour.pb(itr.y);
+			// }
+			int idx=lower_bound(for_one.begin(),for_one.end(),mp(point_collection[index][0]-eps,0))-for_one.begin();
+			for(int i=idx;i<inst;i++)
 			{
-				if(getL2(itr.y,index)>eps_2)
-					continue;
-				else
-					neighbour.pb(itr.y);
+				if(point_collection[i][0]>(point_collection[index][0]+eps))
+					break;
+				neighbour.pb(idx);
 			}
 			break;
 		}

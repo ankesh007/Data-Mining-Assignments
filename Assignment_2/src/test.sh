@@ -2,7 +2,7 @@
 epsilon_collection=(1 10 30 100 300 1000)
 minpts_collection=(3 5 10 15 30)
 files=(1 2 3 4 5)
-make clean
+# make clean
 make DBSCAN
 mkdir -p ../ignore/output
 
