@@ -135,7 +135,7 @@ void writeOutput(const char *filename)
 	for(int i=0;i<numPoints;i++)
 	{
 		if(!used[i])
-			cout<<i<<"\n";
+			write_output<<i<<"\n";
 	}
 	write_output.close();
 }
