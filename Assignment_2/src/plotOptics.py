@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
+import sys
 
-outFile = open("out.txt")
+outFile = open(sys.argv[1])
 outContent = outFile.readlines()
 outContent = list(map(float, outContent))
 maxVal = max(outContent)

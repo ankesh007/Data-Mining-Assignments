@@ -94,10 +94,11 @@ void optics(){
 
 	reachabilityDist.resize(n, -1); // -1 -> not defined yet
 	isProcessed.resize(n, false);
-
+	int count = 0;
 	for (int i=0; i< n; i++){
 		if (!isProcessed[i]){
 			isProcessed[i] = true;
+			// cout << count++ << endl;
 			orderedPoints.pb(mp(i,reachabilityDist[i]));
 			
 			vector <int> nbr;
@@ -109,6 +110,7 @@ void optics(){
 					int node = pq.top().second;
 					pq.pop();
 					if (isProcessed[node]) continue;
+					// cout << count++ << endl;
 					isProcessed[node] = true;
 					orderedPoints.pb(mp(node, reachabilityDist[node]));
 					

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import sys
 
-outFile = open("data.txt")
+outFile = open("datanew.txt")
 lines = outFile.readlines()
 xpoints = []
 ypoints = []
@@ -40,10 +40,12 @@ for line in lines:
 
 print("points")
 
-plt.xlim(-20,520)
+plt.xlim(-20,550)
 plt.ylim(-20,220)
 plt.plot(pointX[0], pointY[0], 'ro')
 plt.plot(pointX[1], pointY[1], 'bs')
 plt.plot(pointX[2], pointY[2], 'go')
+plt.plot(pointX[3], pointY[3], 'ks')
+plt.plot(pointX[4], pointY[4], 'ms')
 # plt.axis([-10,45,-10,45])
 plt.show()
