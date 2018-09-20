@@ -17,7 +17,7 @@ do
 			# echo $filename
 			# echo $temp
 			echo $temp
-			time ./DBSCAN $minpts $eps ../data/$filename ../ignore/output/$temp".txt" 2>&1 | tee -a ../ignore/log.txt 
+			{ time ./DBSCAN $minpts $eps ../data/$filename ../ignore/output/$temp".txt"; } 2>&1 | tee -a ../ignore/log.txt 
 		done
 	done
 done
