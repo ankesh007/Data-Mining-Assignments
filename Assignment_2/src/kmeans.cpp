@@ -30,7 +30,7 @@ void readInput(char* fname){
 
 void initialize_clusters(int k){
 	set<int> random_indices;
-	while(random_indices.size()!=k){
+	while(int(random_indices.size())!=k){
 		int num = rand()%total_points;
 		random_indices.insert(num);
 	}
@@ -39,6 +39,12 @@ void initialize_clusters(int k){
 	{
 		k_points.push_back(dataPoints[*it]);
 	}
+	int i;
+	for (i = 0; i < total_points; i++)
+	{
+		assignments[i] = -1;
+	}
+	return;
 }
 
 float distance(vector<float>& p1, vector<float>& p2){
@@ -53,21 +59,19 @@ float distance(vector<float>& p1, vector<float>& p2){
 }
 
 void kmeans(){
-	int i,j, min_clust,l,m,iter=0;
+	int i,j, min_clust,l,m,flag=1;
 	float min_dis, dist;
-	//vector<vector<float> > centroids;
-	vector<int> num_in_cluster(num_cluster,0);
-	//vector<float> zero(point_dim,0.0); 
-	while(iter<5){
-		//centroids.clear();
+	vector<int> num_in_cluster(num_cluster,0); 
+	while(flag==1){
+		flag = 0;
 		for (l = 0; l < num_cluster; l++)
 		{
-			//centroids.push_back(zero);
 			num_in_cluster[l] = 0;
 		}
 		for (i = 0; i < total_points; i++)
 		{
 			min_dis = FLT_MAX; 
+			min_clust = 0;
 			for (j = 0; j < num_cluster; j++)
 			{
 				dist = distance(k_points[j],dataPoints[i]);
@@ -77,12 +81,12 @@ void kmeans(){
 					min_clust = j;
 				}
 			}
+			if (assignments[i]!=min_clust)
+			{
+				flag = 1;
+			}
 			assignments[i] = min_clust;
 			num_in_cluster[min_clust]++;
-			// for (l = 0; l < point_dim; l++)
-			// {
-			// 	centroids[min_clust][l] = centroids[min_clust][l] + dataPoints[i][l];
-			// }
 		}
 		for (l = 0; l < num_cluster; l++)
 		{
@@ -98,8 +102,6 @@ void kmeans(){
 				k_points[assignments[i]][l] = k_points[assignments[i]][l] + dataPoints[i][l]/num_in_cluster[assignments[i]];
 			}
 		}
-	
-	iter++;
 	}
 	return;
 }
