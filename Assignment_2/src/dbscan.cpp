@@ -12,7 +12,6 @@ using namespace std;
 namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;
 
-
 float epsilon;
 int minPts;
 int numPoints=0;
@@ -56,9 +55,10 @@ void expand(int i)
 		while(current_head<current_tail)
 		{
 			int point_id=my_queue[current_head++];
+			clusters[cluster_no].pb(point_id);
 
 			if(is_noise[point_id])
-				clusters[cluster_no].pb(point_id);
+				continue;
 			else
 			{
 				neighbour.clear();
@@ -114,6 +114,30 @@ void parseInput(char *filename)
 		numPoints++;
 	}
 	dimension=temp_dim;
+	read_input.close();
+}
+
+void writeOutput(const char *filename)
+{
+	ofstream write_output;
+	write_output.open(filename);
+
+	int counter=0;
+	for(auto itr:clusters)
+	{
+		write_output<<"#"<<counter<<"\n";
+		for(auto itr2:itr)
+			write_output<<itr2<<"\n";
+		counter++;
+	}
+
+	write_output<<"#outlier"<<"\n";
+	for(int i=0;i<numPoints;i++)
+	{
+		if(!used[i])
+			write_output<<i<<"\n";
+	}
+	write_output.close();
 }
 
 int main(int argc,char **argv)
@@ -122,9 +146,15 @@ int main(int argc,char **argv)
 	epsilon=atof(argv[2]);
 
 	parseInput(argv[3]);
+	// cout<<dimension<< " "<<epsilon<<" "<<numPoints<<endl;
+	// return 0;
 	init_ds(dimension,numPoints,epsilon);
 	dbscan();
-	cout<<cluster_no<<endl;
+	// cout<<cluster_no<<endl;
+	if(argc==5)
+		writeOutput(argv[4]);
+	else
+		writeOutput("kmeans.txt");
 
 	return 0;
 }
