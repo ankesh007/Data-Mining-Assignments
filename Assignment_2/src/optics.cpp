@@ -1,57 +1,57 @@
-#include <bits/stdc++.h>
+#include "dbscan.h"
+#include "ds.h"
 using namespace std;
 
 // reference :  https://en.wikipedia.org/wiki/OPTICS_algorithm 
-
 #define boost ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
 #define pif pair<int,float>
-#define mp make_pair
-#define pb push_back
 #define pfi pair<float, int>
 
-vector< vector<float> > dataPoints;
+float point_collection[POINTS][DIM];
 vector<pif> orderedPoints;
 vector<float> reachabilityDist;
 vector<bool> isProcessed;
-float eps;
+float epsilon;
 int minNumOfPts;
+int dimension, instances;
 
 void readInput(char* fname){
 	float pt;
 	string line;
   	ifstream myfile(fname); 
+  	int i, j;
+  	i = 0;
     if (myfile.is_open()){
 		stringstream ss;
-		vector<float> temp;
-		while(getline(myfile, line))
-		{
+		while(getline(myfile, line)){
 			istringstream iss(line);
+			j = 0;
 			while(iss>>pt){
-				temp.push_back(pt);
+				point_collection[i][j++] = pt;
 			}
-			dataPoints.push_back(temp);
-			temp.clear();
-		}    	
+			dimension = j;
+			i++;
+		}	
     }
+    instances = i;
     myfile.close();
 	return;
 }
 
 float calculateDist(int idx1, int idx2){
 	float ans = 0;
-	int d = dataPoints[0].size();
-	for (int i=0;i< d; i++){
-		ans += (dataPoints[idx1][i] - dataPoints[idx2][i])*(dataPoints[idx1][i] - dataPoints[idx2][i]);
+	for (int i=0;i< dimension; i++){
+		ans += (point_collection[idx1][i] - point_collection[idx2][i])*(point_collection[idx1][i] - point_collection[idx2][i]);
 	}
 	return sqrt(ans);
 }
 
-void getNbr(int root, vector<int> &nbr){
-	int n = dataPoints.size();
-	for (int i=0; i< n; i++){
-		if (calculateDist(i, root) <= eps) nbr.pb(i);
-	}
-}
+// void getNbr(int root, vector<int> &nbr){
+// 	int n = point_collection.size();
+// 	for (int i=0; i< n; i++){
+// 		if (calculateDist(i, root) <= epsilon) nbr.pb(i);
+// 	}
+// }
 
 // returns -1 if the root point cannot be a core point.
 float getCoreDist(int root, vector<int> &nbr){
@@ -86,7 +86,7 @@ void updateReachability(vector<int> &nbr, int root, priority_queue<pfi, vector<p
 }
 
 void optics(){
-	int n = dataPoints.size();
+	int n = instances;
 
 	orderedPoints.clear();
 	reachabilityDist.clear();
@@ -101,7 +101,7 @@ void optics(){
 			orderedPoints.pb(mp(i,reachabilityDist[i]));
 			
 			vector <int> nbr;
-			getNbr(i,nbr);
+			query_ds(i,nbr);
 			if (nbr.size() >= minNumOfPts){
 				priority_queue <pfi, vector<pfi>, greater<pfi> > pq;
 				updateReachability(nbr, i, pq);
@@ -113,7 +113,7 @@ void optics(){
 					orderedPoints.pb(mp(node, reachabilityDist[node]));
 					
 					vector<int> nbr1;
-					getNbr(node, nbr1);
+					query_ds(node, nbr1);
 					if (nbr1.size() >= minNumOfPts){
 						updateReachability(nbr1, node, pq);
 					}
@@ -134,10 +134,10 @@ void output(char* fname){
 
 int main(int argc, char *argv[]){
 	boost
-	dataPoints.clear();
 	readInput(argv[1]);
-	eps = atof(argv[2]);
+	epsilon = atof(argv[2]);
 	minNumOfPts = atoi(argv[3]);
+	init_ds(dimension,instances,epsilon);
 	optics();
 	output(argv[4]);
 	return 0;
