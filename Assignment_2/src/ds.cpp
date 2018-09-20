@@ -1,8 +1,8 @@
 #include "ds.h"
 #include "dbscan.h"
 
-bgi::rtree< value_2, bgi::rstar<16> > rtree_2;
 bgi::rtree< value_1, bgi::rstar<16> > rtree_1;
+bgi::rtree< value_2, bgi::rstar<16> > rtree_2;
 bgi::rtree< value_3, bgi::rstar<16> > rtree_3;
 bgi::rtree< value_4, bgi::rstar<16> > rtree_4;
 bgi::rtree< value_5, bgi::rstar<16> > rtree_5;
@@ -286,4 +286,5 @@ void query_ds(int index,vector<int> &neighbour)
 			break;
 		}
 	}
+	// cout<<neighbour.size()<<endl;
 }
