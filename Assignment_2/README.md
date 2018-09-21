@@ -27,3 +27,4 @@ OPTICS:
 
 Note: for `DBSCAN`, outputfilename is optional
 
+Also, for better visualization for weakness of kmeans and dbscan, read `instruction.txt` in `src` directory. We have provided python scripts.
