@@ -2,7 +2,7 @@
 
 pushd .
 
-install_path="$HOME/.local/lib2"
+install_path="$HOME/.local/lib"
 bashrc_path="$HOME/.bashrc"
 
 echo $install_path
