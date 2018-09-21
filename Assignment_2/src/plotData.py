@@ -10,8 +10,8 @@ for i in range(0, len(lines)):
 	pointX.append(float(values[0]))
 	pointY.append(float(values[1]))
 
-plt.xlim(-20,550)
-plt.ylim(-20,220)
+plt.xlim(-60,550)
+plt.ylim(-60,220)
 plt.plot(pointX, pointY, 'go')
 # plt.axis([-10,45,-10,45])
 plt.show()

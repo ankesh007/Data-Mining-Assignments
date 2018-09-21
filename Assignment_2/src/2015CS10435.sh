@@ -2,7 +2,7 @@
 if [ "$#" -eq 3 ] && [ $1 = "-kmeans" ]
 then
 	make KMEANS
-	./KMEANS $2 $3
+	./KMEANS $3 $2
 elif [ "$#" -eq 4 ] && [ $1 = "-dbscan" ]
 then
     make DBSCAN
@@ -10,7 +10,7 @@ then
 elif [ "$#" -eq 4 ] && [ $1 = "-optics" ]
 then
     make OPTICS
-    ./OPTICS $2 $3 $4
+    ./OPTICS $4 $3 $2
 else
 	echo "wrong format"
 fi

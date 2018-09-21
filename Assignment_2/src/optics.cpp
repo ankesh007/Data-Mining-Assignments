@@ -55,7 +55,7 @@ float calculateDist(int idx1, int idx2){
 
 // returns -1 if the root point cannot be a core point.
 float getCoreDist(int root, vector<int> &nbr){
-	if (nbr.size() < minNumOfPts) return -1;
+	if (int(nbr.size()) < minNumOfPts) return -1;
 	else {
 		priority_queue<pfi> pq;
 		int n = nbr.size();
@@ -94,7 +94,6 @@ void optics(){
 
 	reachabilityDist.resize(n, -1); // -1 -> not defined yet
 	isProcessed.resize(n, false);
-	int count = 0;
 	for (int i=0; i< n; i++){
 		if (!isProcessed[i]){
 			isProcessed[i] = true;
@@ -103,7 +102,7 @@ void optics(){
 			
 			vector <int> nbr;
 			query_ds(i,nbr);
-			if (nbr.size() >= minNumOfPts){
+			if (int(nbr.size()) >= minNumOfPts){
 				priority_queue <pfi, vector<pfi>, greater<pfi> > pq;
 				updateReachability(nbr, i, pq);
 				while (!pq.empty()){
@@ -116,7 +115,7 @@ void optics(){
 					
 					vector<int> nbr1;
 					query_ds(node, nbr1);
-					if (nbr1.size() >= minNumOfPts){
+					if (int(nbr1.size()) >= minNumOfPts){
 						updateReachability(nbr1, node, pq);
 					}
 				}
@@ -125,10 +124,10 @@ void optics(){
 	}
 }
 
-void output(char* fname){
+void output(){
 	ofstream myfile;
-	myfile.open(fname);
-	for (int i=0; i < orderedPoints.size(); i++){
+	myfile.open("optics.txt");
+	for (int i=0; i < int(orderedPoints.size()); i++){
 		myfile << orderedPoints[i].second << endl;
 	}
 	myfile.close();
@@ -141,6 +140,12 @@ int main(int argc, char *argv[]){
 	minNumOfPts = atoi(argv[3]);
 	init_ds(dimension,instances,epsilon);
 	optics();
-	output(argv[4]);
+	output();
+	string command = "python plotOptics.py optics.txt";
+	int success = system(command.c_str());
+	if (success==1)
+	{
+		cout<<"";
+	}
 	return 0;
 }

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import sys
 
-outFile = open("datanew.txt")
+outFile = open(sys.argv[1])
 lines = outFile.readlines()
 xpoints = []
 ypoints = []
@@ -14,8 +14,8 @@ outFile.close()
 
 print("done data")
 
-outFile = open(sys.argv[1])
-num_clusters = int(sys.argv[2])
+outFile = open(sys.argv[2])
+num_clusters = int(sys.argv[3])
 lines = outFile.readlines()
 
 print("done cluster")
@@ -40,8 +40,8 @@ for line in lines:
 
 print("points")
 
-plt.xlim(-20,550)
-plt.ylim(-20,220)
+plt.xlim(-60,550)
+plt.ylim(-60,220)
 plt.plot(pointX[0], pointY[0], 'ro')
 plt.plot(pointX[1], pointY[1], 'bs')
 plt.plot(pointX[2], pointY[2], 'go')

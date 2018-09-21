@@ -28,16 +28,18 @@ for i in range(0,400):
 
 
 for count in range(0,3000):
-	radius = random.uniform(0.0,10.0)
+	radius = random.uniform(0.0,5.0)
 	angle = random.uniform(0.0,360.0)
 	x = 500 + radius*math.cos(angle*3.14257/180)
 	y = 100 + radius*math.sin(angle*3.14257/180)
 	print(str(x) + " "+ str(y))
 
 
-for count in range(0,7000):
-	radius = random.uniform(25.0,35.0)
+for count in range(0,6999):
+	radius = random.uniform(35.0,40.0)
 	angle = random.uniform(0.0,360.0)
 	x = 500 + radius*math.cos(angle*3.14257/180)
 	y = 100 + radius*math.sin(angle*3.14257/180)
 	print(str(x) + " "+ str(y))
+
+print(str(-50) + " "+ str(-50))
