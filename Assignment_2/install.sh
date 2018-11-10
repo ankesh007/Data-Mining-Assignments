@@ -1,4 +1,4 @@
-# git clone https://github.com/ankesh007/Data-Mining-Assignments.git
+git clone https://github.com/ankesh007/Data-Mining-Assignments.git
 
 pushd .
 
