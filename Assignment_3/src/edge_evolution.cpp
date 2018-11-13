@@ -3,7 +3,7 @@
 #include "declaration.h"
 
 extern vector<graph *> graph_database;
-extern map<string,pattern*> pattern_code;
+extern map<string,pattern*> edge_code;
 
 string edgeToHashVal(int uLabel,int vLabel,int edgeLabel){
 	string hashVal = "";
@@ -84,14 +84,14 @@ void edge_evolution(){
 				int edgeLabel =  graph_database[gid]->adjList[nodeId][edgeId].y;
 				string edgeHash = edgeToHashVal(uLabel, vLabel,edgeLabel);
 
-				auto itr = pattern_code.find(edgeHash);
-				bool isNewEdge = (itr == pattern_code.end());
+				auto itr = edge_code.find(edgeHash);
+				bool isNewEdge = (itr == edge_code.end());
 				pattern* pat;
 				if (isNewEdge){
-					pat = convertEdgeToPattern();
+					pat = convertEdgeToPattern(u,v,uLabel,vLabel,edgeLabel);
 					// insert pattern into the database
-					pattern_code[edgeHash] = p; 
-					itr = pattern_code.find(edgeHash);
+					edge_code[edgeHash] = pat; 
+					itr = edge_code.find(edgeHash);
 				}
 				else {
 					pat = itr->second;

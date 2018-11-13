@@ -1,8 +1,9 @@
-#include "EVO.h"
+// #include "EVO.h"
 #include "graph.h"
 #include "declaration.h"
 #include "feature.h"
 #include "edge_evolution.h"
+#include "candidate_list.h"
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -23,10 +24,341 @@ float features_min_score=0;
 Database specific for evolution
  */
 vector<graph *> graph_database;
-map<string, pattern *> pattern_code;
+map<vector<int>, pattern *> pattern_code;
+map<string, pattern *> edge_code;
 vector<candidate_list *> candidate_lists;
 vector<feature*> graph_features;
 vector<bool> feature_updated;
+
+
+
+/*compare the discrimination power of two features*/
+bool cmp_feature(feature* f1, feature* f2)
+{
+    return f1->score_precise > f2->score_precise;
+}
+
+// /*calculate the normalized accuracy based on numbers of false positives and false negatives*/
+float norm_acc(int mis_pos, int mis_neg)
+{
+    int cpos = positive_graph_count - mis_pos;
+    int cneg = graph_database.size() - positive_graph_count - mis_neg;
+    float sen = (float)cpos / (float)positive_graph_count;
+    float spe = (float)cneg / (float)(graph_database.size() - positive_graph_count);
+    return (sen+spe)/2;    
+}
+/*output to a file the adjacency matrix of the feature subgraph pattern 
+ for a certain positive graph*/
+void fout_feature_matrix(int gid, ofstream& fout)
+{
+    vector<int>& code = graph_features[gid]->code;
+    int size = graph_features[gid]->size;
+    int** matrix = new int*[size];
+    for (int i = 0; i < size; i++)
+        matrix[i] = new int[size];
+    int cur = 0;
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j <= i; j++)
+            matrix[i][j] = code[cur++];
+    }
+    for (int i = 0; i < size; i++)
+        for (int j = i + 1; j < size; j++)
+            matrix[i][j] = matrix[j][i];
+
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+            fout<<matrix[i][j]<<" ";
+        fout<<endl;
+    }
+}
+
+/*output to a file the adjacency matrix of a subgraph pattern, given its code*/
+void fout_feature_matrix(vector<int>& code, int size, ofstream& fout)
+{
+    int** matrix = new int*[size];
+    for (int i = 0; i < size; i++)
+        matrix[i] = new int[size];
+    int cur = 0;
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j <= i; j++)
+            matrix[i][j] = code[cur++];
+    }
+    for (int i = 0; i < size; i++)
+        for (int j = i + 1; j < size; j++)
+            matrix[i][j] = matrix[j][i];
+
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+            fout<<matrix[i][j]<<" ";
+        fout<<endl;
+    }
+}
+
+/*given the pointer to a feature, output to a file the adjacency matrix of this feature*/
+void fout_feature_matrix(feature* f, ofstream& fout)
+{
+    vector<int>& code = f->code;
+    int size = f->size;
+    int** matrix = new int*[size];
+    for (int i = 0; i < size; i++)
+        matrix[i] = new int[size];
+    int cur = 0;
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j <= i; j++)
+            matrix[i][j] = code[cur++];
+    }
+    for (int i = 0; i < size; i++)
+        for (int j = i + 1; j < size; j++)
+            matrix[i][j] = matrix[j][i];
+
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+            fout<<matrix[i][j]<<" ";
+        fout<<endl;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/*select feature subgraph patterns to generate classification rules based on the selected patterns;
+ normalized accuracy of the classification rules is maximized for the input graph_database*/
+void feature_selection(vector<feature*>& features)
+{
+    vector<bool> has_feature;
+    vector<bool> covered;
+    int mis_pos = positive_graph_count;
+    int mis_neg = 0;
+    int delta_mis_pos, delta_mis_neg;
+    float nacc = norm_acc(mis_pos, mis_neg);
+    for (int i = 0; i < positive_graph_count; i++)
+        covered.push_back(false);
+    for (int i = 0; i < graph_database.size(); i++)
+        has_feature.push_back(false);
+    vector<feature*> sorted_features;
+    for (int i = 0; i < graph_features.size(); i++)
+        sorted_features.push_back(graph_features[i]);
+
+    sort(sorted_features.begin(), sorted_features.end(), cmp_feature);
+
+    for (int i = 0; i < sorted_features.size(); i++)
+    {
+        if (sorted_features[i]->pgids.size() == 0)
+            continue;
+        delta_mis_pos = 0;
+        delta_mis_neg = 0;
+        for (int j = 0; j < sorted_features[i]->pgids.size(); j++)
+            if (!has_feature[(sorted_features[i]->pgids)[j]])
+                delta_mis_pos++;
+        for (int j = 0; j < sorted_features[i]->ngids.size(); j++)
+            if (!has_feature[(sorted_features[i]->ngids)[j]])
+                delta_mis_neg++;
+        float tmp = norm_acc(mis_pos-delta_mis_pos, mis_neg+delta_mis_neg);
+        if (delta_mis_pos == 0)
+            continue;
+        if (tmp > nacc)
+        {
+            nacc = tmp;
+            features.push_back(sorted_features[i]);
+            mis_pos -= delta_mis_pos;
+            mis_neg += delta_mis_neg;
+            for (int j = 0; j < sorted_features[i]->pgids.size(); j++)
+                has_feature[(sorted_features[i]->pgids)[j]] = true;
+            for (int j = 0; j < sorted_features[i]->ngids.size(); j++)
+                has_feature[(sorted_features[i]->ngids)[j]] = true;
+        }
+    }
+
+    mis_pos = 0;
+    mis_neg = 0;
+
+    for (int i = 0; i < graph_database.size(); i++)
+        if (i < positive_graph_count && !has_feature[i])
+            mis_pos++;
+        else if (i >= positive_graph_count && has_feature[i])
+            mis_neg++;
+    cout<<"mis_pos: "<<mis_pos<<" mis_neg: "<<mis_neg<<endl;
+
+    cout<<"normalized accuracy in training set: "<<nacc<<endl;
+}
+
+/*output selected feature subgraph patterns to a file, including the information such as 
+ adjacency matrix, positive frequency and negative frequency*/
+void fout_features()
+{
+    string fname = "feature1.txt";
+    string fname2 ="feature2.txt";
+    ofstream out(fname.c_str());
+    ofstream fout(fname2.c_str());
+    vector<feature*> features;
+    int pid = 0;
+
+    feature_selection(features);
+
+    out<<"rules: "<<features.size()<<endl;
+    for (int i = 0; i < features.size(); i++)
+    {
+        double freq = (double)(features[i]->pgids.size())/(double)positive_graph_count;
+        double bg_freq = (double)(features[i]->ngids.size())/(double)(graph_database.size()-positive_graph_count);
+
+        out<<"size: 1 id: ";
+        if (features[i]->size != 0)
+            out<<(pid++)<<" ";
+        else
+            for (int j = 0; j < features[i]->codes.size(); j++)
+                out<<(pid++)<<" ";
+        out<<"freq: "<<freq<<" bg_freq: "<<bg_freq<<endl;
+    }
+
+    pid = 0;
+    for (int i = 0; i < features.size(); i++)
+    {
+        double freq = (double)(features[i]->pgids.size())/(double)positive_graph_count;
+        double bg_freq = (double)(features[i]->ngids.size())/(double)(graph_database.size()-positive_graph_count);
+        if (features[i]->size != 0)
+        {
+            out<<"id: "<<(pid++)<<endl;
+            out<<"adj matrix: "<<features[i]->size<<endl;
+            fout_feature_matrix(features[i], out);
+        }
+        else
+            for (int j = 0; j < features[i]->codes.size(); j++)
+            {
+                out<<"id: "<<(pid++)<<endl;
+                int m_size = features[i]->codes[j]->size();
+                m_size = sqrt(2*m_size-1);
+                out<<"adj matrix: "<<m_size<<endl;
+                fout_feature_matrix(*(features[i]->codes[j]), m_size, out);
+            }
+
+        out<<"neg_freq: "<<bg_freq<<endl;
+        out<<"pos freq: "<<freq<<endl;
+    }
+
+    for (int i = 0; i < features.size(); i++)
+    {
+        fout<<"feature_size: "<<features[i]->size<<endl;
+        fout<<"feature_code_size: "<<features[i]->code.size()<<endl;
+        for (int j = 0; j < features[i]->code.size(); j++)
+            fout<<features[i]->code[j]<<" ";
+        fout<<endl;
+        fout<<"feature_score: "<<features[i]->score_precise<<endl;
+        fout<<"pgids_size: "<<features[i]->pgids.size()<<endl;
+        for (int j = 0; j < features[i]->pgids.size(); j++)
+            fout<<features[i]->pgids[j]<<" ";
+        fout<<endl;
+        fout<<"ngids_size: "<<features[i]->ngids.size()<<endl;
+        for (int j = 0; j < features[i]->ngids.size(); j++)
+            fout<<features[i]->ngids[j]<<" ";
+        fout<<endl;
+    }
+}
+
+/*output the svm input file for the training dataset*/
+void fout_training_matrix()
+{
+    string fname = "training.matrix";
+    ofstream out(fname.c_str());
+    map<vector<int>,pattern *> tmp_idx;
+    vector<feature*> features;
+    cout<<graph_database.size()<<"****"<<graph_features.size()<<endl;
+    cout<<graph_features.size()<<endl;
+
+    for (int i = 0; i < graph_features.size(); i++)
+    {
+        if (graph_features[i]->code.size() == 0)
+        {
+            graph_features[i]->code = graph_features[i]->pgids;
+        }
+        if (tmp_idx.find(graph_features[i]->code)!=tmp_idx.end())
+            continue;
+        else
+        {
+            tmp_idx[graph_features[i]->code]=0;
+            features.push_back(graph_features[i]);
+        }
+    }
+
+    bool** svm_matrix;
+    svm_matrix = new bool*[graph_database.size()];
+    for (int i = 0; i < graph_database.size(); i++)
+    {
+        svm_matrix[i] = new bool[features.size()];
+        for (int j = 0; j < features.size(); j++)
+            svm_matrix[i][j] = false;
+    }
+
+    for (int i = 0; i < features.size(); i++)
+    {
+        for (int j = 0; j < features[i]->pgids.size(); j++)
+        {
+            int x = (features[i]->pgids)[j];
+            int y = i;
+            svm_matrix[x][y] = true;
+        }
+        for (int j = 0; j < features[i]->ngids.size(); j++)
+        {
+            int x = (features[i]->ngids)[j];
+            int y = i;
+            svm_matrix[x][y] = true;
+        }
+    }
+
+    for (int i = 0; i < graph_database.size(); i++)
+    {
+        if (i < positive_graph_count)
+            out<<"+1 ";
+        else
+            out<<"-1 ";
+        for (int j = 0; j < features.size(); j++)
+            if (svm_matrix[i][j])
+                out<<(j+1)<<":1.0 ";
+        out<<endl;
+    }
+}
+
+/*output the size, positive support and negative support information of the 
+ resulting subgraph patterns without the adjacency matrices*/
+void fout_basic_result()
+{
+    string fname = "Basic_res.txt";
+    ofstream out(fname.c_str());
+
+    map<vector<int>,pattern *> tmp_idx;
+    for (int i = 0; i < graph_features.size(); i++)
+    {
+        if (tmp_idx.find(graph_features[i]->code)!=tmp_idx.end())
+            continue;
+        else
+            tmp_idx[graph_features[i]->code]=0;
+        out<<"size: "<<graph_features[i]->size<<endl;
+        fout_feature_matrix(i, out);
+        out<<"pgids_size: "<<graph_features[i]->pgids.size()<<endl;
+        for (int j = 0; j < graph_features[i]->pgids.size(); j++)
+            out<<graph_features[i]->pgids[j]<<" ";
+        out<<endl;
+        out<<"ngids_size: "<<graph_features[i]->ngids.size()<<endl;
+        for (int j = 0; j < graph_features[i]->ngids.size(); j++)
+            out<<graph_features[i]->ngids[j]<<" ";
+        out<<endl;
+    }
+}
+
+
 
 void read_graph()
 {
@@ -133,6 +465,7 @@ void migrate(pattern *p)
 }
 bool has_potential_pre(pattern *p,float max_pattern_score)
 {
+    // cout<<"has_potenz"<<endl;
     for (auto itr:p->pgids)
     {
         if (max_pattern_score > graph_features[itr]->score_precise)
@@ -145,17 +478,25 @@ void evolve()
 {
     for(int i=0;i<positive_graph_count;i++)
     {
+        cout<<i<<endl;
         pattern *sampled_pattern=candidate_lists[i]->select_extension();
+        if (sampled_pattern == NULL)
+            return;
+        cout<<sampled_pattern<<endl;
+        // cout<<"Seleceted Ext"<<endl;
 
         if(sampled_pattern->ngids.size()==0 || sampled_pattern->size>=max_size)
         {
+            // cout<<"Reached =in"<<endl;
             delete sampled_pattern;
             return;
         }
+        // cout<<"After Selected"<<endl;
 
         float max_pattern_score=get_score(sampled_pattern->pgids.size(),0);
         float best_score_peredge = max_pattern_score*1.0 / (sampled_pattern->edge_size + 1);
         float cur_score_peredge = sampled_pattern->score_precise*1.0/sampled_pattern->edge_size;
+        // cout<<"Bef Comparisons"<<endl;
         if (best_score_peredge<cur_score_peredge && sampled_pattern->momentum==0)
         {
             delete sampled_pattern;
@@ -166,26 +507,35 @@ void evolve()
             delete sampled_pattern;
             return;
         }
-        vector<pattern *> *new_patterns = sampled_pattern->extend(graph_database, pattern_code);
+        // cout<<"Bef"<<endl;
+        vector<pattern *> *new_patterns = sampled_pattern->extend(graph_database);
+        // cout<<"Extending"<<endl;
         delete sampled_pattern;
         // vector<pattern *>::iterator vit;
         for (auto itr = new_patterns->begin(); itr != new_patterns->end(); itr++)
+        {
+            // cout<<"migrate"<<endl;
             migrate(*itr);
+
+        }
     }   
 }
 
 void pattern_evolution()
 {
     edge_evolution();
+    // cout<<"Edge Evlive"<<endl;
 
-    for(auto itr:pattern_code)
+    for(auto itr:edge_code)
     {
         update_pattern_score(itr.y);
         migrate(itr.y);
     }
+    // cout<<"Here"<<endl;
     
     while(iter_num--)
     {
+        cout<<"Evolution:"<<iter_num<<endl;
         bool flag=true;
         for(auto itr:candidate_lists)
         {
@@ -212,27 +562,29 @@ int main(int argc, char** argv)
     srand(time(NULL));
 
     read_graph();
+    cout<<"Read Graph"<<endl;
     init();
+    cout << "Init" << endl;
     pattern_evolution();
     // output_feature();
 
 	
-    // double score_sum = 0.0;
-    // for (int i = 0; i < positive_graph_count; i++)
-    // {
-    //     score_sum += test.graph_features[i]->score_precise;
-	// 	/*if a positive graph has no discriminative subgraph pattern found by GAIA,
-	// 	 the score of the feature of this positive graph is 0*/
-    //     if (test.graph_features[i]->score_precise < 0.000001)
-    //         cout<<"graph "<<i<<" has no discriminative feature"<<endl;
-    // }
-    // /*output to screen the average score of all the feature subgraph patterns*/
-    // cout<<"average_score: "<<(score_sum/(double)positive_graph_count)<<endl;
-    // cout<<"mining is completed successfully"<<endl;
+    double score_sum = 0.0;
+    for (int i = 0; i < positive_graph_count; i++)
+    {
+        score_sum += graph_features[i]->score_precise;
+		/*if a positive graph has no discriminative subgraph pattern found by GAIA,
+		 the score of the feature of this positive graph is 0*/
+        if (graph_features[i]->score_precise < 0.000001)
+            cout<<"graph "<<i<<" has no discriminative feature"<<endl;
+    }
+    /*output to screen the average score of all the feature subgraph patterns*/
+    cout<<"average_score: "<<(score_sum/(double)positive_graph_count)<<endl;
+    cout<<"mining is completed successfully"<<endl;
 	
-    //     /*output the resulting feature subgraph patterns to file*/
-    // test.fout_features();			
-    // test.fout_training_matrix();
+        /*output the resulting feature subgraph patterns to file*/
+    fout_features();			
+    fout_training_matrix();
     
     // return EXIT_SUCCESS;
 }

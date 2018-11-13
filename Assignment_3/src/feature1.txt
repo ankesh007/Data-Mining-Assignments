@@ -1,0 +1,97 @@
+rules: 11
+size: 1 id: 0 freq: 0.0857143 bg_freq: 0.0101215
+size: 1 id: 1 freq: 0.257143 bg_freq: 0.0263158
+size: 1 id: 2 freq: 0.0371429 bg_freq: 0.00202429
+size: 1 id: 3 freq: 0.374286 bg_freq: 0.0526316
+size: 1 id: 4 freq: 0.0942857 bg_freq: 0.0526316
+size: 1 id: 5 freq: 0.0114286 bg_freq: 0.00607287
+size: 1 id: 6 freq: 0.142857 bg_freq: 0.0425101
+size: 1 id: 7 freq: 0.108571 bg_freq: 0.0425101
+size: 1 id: 8 freq: 0.134286 bg_freq: 0.0425101
+size: 1 id: 9 freq: 0.00571429 bg_freq: 0
+size: 1 id: 10 freq: 0.00571429 bg_freq: 0.00404858
+id: 0
+adj matrix: 2
+3 1 
+1 7 
+neg_freq: 0.0101215
+pos freq: 0.0857143
+id: 1
+adj matrix: 5
+3 1 1 0 0 
+1 3 0 1 0 
+1 0 4 0 2 
+0 1 0 2 0 
+0 0 2 0 4 
+neg_freq: 0.0263158
+pos freq: 0.257143
+id: 2
+adj matrix: 5
+3 1 1 0 0 
+1 3 0 1 0 
+1 0 1 0 0 
+0 1 0 4 2 
+0 0 0 2 4 
+neg_freq: 0.00202429
+pos freq: 0.0371429
+id: 3
+adj matrix: 4
+3 1 1 0 
+1 3 0 0 
+1 0 4 2 
+0 0 2 4 
+neg_freq: 0.0526316
+pos freq: 0.374286
+id: 4
+adj matrix: 2
+2 2 
+2 6 
+neg_freq: 0.0526316
+pos freq: 0.0942857
+id: 5
+adj matrix: 2
+3 1 
+1 16 
+neg_freq: 0.00607287
+pos freq: 0.0114286
+id: 6
+adj matrix: 5
+3 1 1 0 0 
+1 3 0 1 0 
+1 0 1 0 1 
+0 1 0 3 0 
+0 0 1 0 2 
+neg_freq: 0.0425101
+pos freq: 0.142857
+id: 7
+adj matrix: 4
+3 1 0 0 
+1 1 1 0 
+0 1 3 2 
+0 0 2 3 
+neg_freq: 0.0425101
+pos freq: 0.108571
+id: 8
+adj matrix: 2
+1 2 
+2 3 
+neg_freq: 0.0425101
+pos freq: 0.134286
+id: 9
+adj matrix: 4
+3 1 1 1 
+1 3 0 1 
+1 0 2 0 
+1 1 0 3 
+neg_freq: 0
+pos freq: 0.00571429
+id: 10
+adj matrix: 6
+3 2 0 1 0 0 
+2 3 1 0 0 0 
+0 1 3 0 0 1 
+1 0 0 3 1 0 
+0 0 0 1 2 0 
+0 0 1 0 0 14 
+neg_freq: 0.00404858
+pos freq: 0.00571429

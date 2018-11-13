@@ -1,10 +1,3 @@
-/* 
- * File:   pattern.h
- * Author: njin
- *
- * Created on October 10, 2009, 7:05 PM
- */
-
 #ifndef _PATTERN_H
 #define	_PATTERN_H
 
@@ -14,7 +7,6 @@
 #include <iostream>
 #include <map>
 #include "common.h"
-#include "pattern_index.h"
 #include "graph.h"
 using namespace std;
 
@@ -65,9 +57,7 @@ public:
     vector<bool> dead_node; //labels that don't have new extensions
     vector<bool> is_alive;  //labels that have new extensions
     bool has_potential;     //can still extend into larger patterns
-#ifdef MOMENTUM
     int momentum;			//amount of momentum left
-#endif
     map<int, extension* > extensions;	//all possible the extensions
 
 
@@ -75,20 +65,17 @@ public:
     ~pattern();			//destructor
     vector<int> gen_code();   //generate the code of this pattern
     bool check_embeddings(vector<graph*>& graphs); //check if the embeddings of the pattern are correct
-    void get_score();   //calculate score
-    void cout_matrix(); //output matrix
-    void cout_code();   //output code
 	
     //generate a new pattern based on the extension
     //pattern_index is the index of all existing patterns
-    pattern* gen_new_pattern(extension& ext, int code, pattern_index& pat_idx, vector<graph*>& graphs);
+    pattern* gen_new_pattern(extension& ext, int code, vector<graph*>& graphs);
     
 	//find all possible extensions
     void collect_ext(int gid, int par_em_gid, occ& occ1, int occ1_id, vector<graph*>& graphs);
     
 	//generate new subgraph patterns based on all possible extensions
 	//returns the vector of new subgraph patterns
-    vector<pattern*>* extend(vector<graph*>& graphs, pattern_index& pat_idx); //this function prunes patterns that decrease in score
+    vector<pattern*>* extend(vector<graph*>& graphs); //this function prunes patterns that decrease in score
 };
 
 #endif	/* _PATTERN_H */

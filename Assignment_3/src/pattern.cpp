@@ -1,39 +1,16 @@
 #include <bits/stdc++.h>
 #include "pattern.h"
+#include "declaration.h"
 
-extern double pfreq_threshold;	//global variable: positive frequency threshold
+extern double pfreq_threshold;
+extern map<vector<int>, pattern *> pattern_code;
 
-//destructor of class extension
 extension::~extension()
 {
     for (int i = 0; i < this->ext_occs.size(); i++)
         delete ext_occs[i];
 }
 
-//output to screen the adjacency matrix of the subgraph pattern
-void pattern::cout_matrix()
-{
-    for (int i = 0; i < this->size; i++)
-    {
-        for (int j = 0; j < size; j++)
-            cout << matrix[i][j] << " ";
-        cout<<endl;
-    }
-}
-
-//output to screen the code of the subgraph pattern
-void pattern::cout_code()
-{
-    int cur = 0;
-    for (int i = 0; i < size; i++)
-    {
-        for (int j = 0; j <= i; j++)
-            cout<<code[cur++]<<" ";
-        cout<<endl;
-    }
-}
-
-//constructor of class pattern
 pattern::pattern()
 {
     this->momentum = 0;
@@ -44,25 +21,25 @@ pattern::pattern()
     has_potential = true;
 }
 
-//destructor of class pattern
 pattern::~pattern()
 {
     for (int i = 0; i < size; i++)
         delete[] matrix[i];
     if (size != 0)
         delete[] matrix;
-    for (int i = 0; i < embeddings.size(); i++)
+    for (auto itr:embeddings)
     {
-        for (int j = 0; j < (embeddings[i].second)->size(); j++)
-            delete embeddings[i].second->at(j);
-        delete embeddings[i].second;
+        for (int j = 0; j < (itr.second)->size(); j++)
+            delete itr.second->at(j);
+        delete itr.second;
     }
 }
 
-vector<pattern*>* pattern::extend(vector<graph*>& graphs, pattern_index& pat_idx)
+vector<pattern*>* pattern::extend(vector<graph*>& graphs)
 {
     is_alive.resize(size);
     vector<pattern*>* extended_patterns = new vector<pattern*>;
+    cout<<"Here"<<endl;
 
     for (int i = 0; i < this->embeddings.size(); i++)
     {
@@ -74,7 +51,7 @@ vector<pattern*>* pattern::extend(vector<graph*>& graphs, pattern_index& pat_idx
     map<int, extension*>::iterator mit;
     for (mit = extensions.begin(); mit != extensions.end(); mit++)
     {
-        pattern* p = gen_new_pattern(*(mit->second), mit->first, pat_idx, graphs);
+        pattern* p = gen_new_pattern(*(mit->second), mit->first, graphs);
         delete mit->second;
         if (p != NULL)
         {
@@ -87,8 +64,7 @@ vector<pattern*>* pattern::extend(vector<graph*>& graphs, pattern_index& pat_idx
 
 //generate a new pattern based on the extension
 //pattern_index is the index of all existing patterns
-pattern* pattern::gen_new_pattern(extension& ext, int code,
-        pattern_index& pat_idx, vector<graph*>& graphs)
+pattern* pattern::gen_new_pattern(extension& ext, int code, vector<graph*>& graphs)
 {
     int source = EXTSOURCE(code);
     int drain = EXTDRAIN(code);
@@ -97,43 +73,24 @@ pattern* pattern::gen_new_pattern(extension& ext, int code,
     pattern* res = new pattern;
     res->pgids = ext.pgids;
     res->ngids = ext.ngids;
-    #ifdef MIN_FREQUENCY_EXTENSION
-    float pfreq = (float)(res->pgids.size()) / (float)positive_graph_count;
-    if (pfreq < pfreq_threshold)
-    {
-        res->size = 0;
-        delete res;
-        return NULL;
-    }
-    #endif
+
     if (ext.is_internal_ext)
         res->size = this->size;
     else
         res->size = this->size + 1;
     res->edge_size = this->edge_size + 1;
     
-    res->get_score();
-#ifdef TOTAL_SCORE
+    update_pattern_score(res);
     if (res->score_precise < this->score_precise)
-#endif
-#ifdef UNIT_SCORE
-    if (res->score_precise*res->edge_size
-            < this->score_precise*this->edge_size)
-#endif
     {
         res->size = 0;
         delete res;
         return NULL;
     }
 
-#ifdef MOMENTUM
-    #ifdef TOTAL_SCORE
     if (res->score_precise/(float)(res->edge_size) <
             this->score_precise / (float)(edge_size))
-    #endif
-    #ifdef UNIT_SCORE
     if (res->score_precise < this->score_precise)
-    #endif
         res->momentum = this->momentum - M_LOSS;
     else
         res->momentum = this->momentum + M_GAIN;
@@ -143,29 +100,11 @@ pattern* pattern::gen_new_pattern(extension& ext, int code,
         delete res;
         return NULL;
     }
-#endif
-#ifndef MOMENTUM
-    #ifdef TOTAL_SCORE
-    if (res->score_precise/(float)(res->edge_size) <
-            this->score_precise / (float)(edge_size))
-    #endif
-    #ifdef UNIT_SCORE
-    if (res->score_precise < this->score_precise)
-    #endif
-    {
-        res->size = 0;
-        delete res;
-        return NULL;
-    }
-#endif
-
-    #ifdef DEAD_NODE
     for (int i = 0; i < size; i++)
             dead_node[i] = !is_alive[i];
     res->dead_node = this->dead_node;
     if (res->size > this->size)
         res->dead_node.push_back(false);
-    #endif
 
     //do the following only if the score increases
 
@@ -209,13 +148,13 @@ pattern* pattern::gen_new_pattern(extension& ext, int code,
             if (res->embeddings.size() == 1)
             {
                 res->gen_code();
-                if (pat_idx.find(res->code))
+                if (pattern_code.find(res->code)!=pattern_code.end())
                 {
                     res->size = 0;
                     delete res;
                     return NULL;
-                }
-                pat_idx.insert(res->code);
+                } 
+                pattern_code[res->code]=0;
             }
             voccs = new vector<occ*>;
             res->embeddings.push_back(pair<int,vector<occ*>*>(gid, voccs));
@@ -260,26 +199,20 @@ void pattern::collect_ext(int gid, int par_em_gid, occ& occ1, int occ1_id, vecto
     int nid1, nid2;
     int edge_label, drain_node;
     pair<int, int> pair_info;
-    vector<pair<int, int> >* vadj;
 
     for (int i = 0; i < occ1.size(); i++)
     {
-        #ifdef RANDOM_NODE_EXTENSION
-        if (rand()%2 == 0)
-            continue;
-        #endif
-        #ifdef DEAD_NODE
         if (dead_node[i])
         {
             continue;
         }
-        #endif
         nid1 = occ1[i];
-        vadj = (graphs[gid]->adjList)[nid1];
-        for (int j = 0; j < vadj->size(); j++)
+        vector<pair<int, int>> &vadj = (graphs[gid]->adjList)[nid1];
+
+        for (int j = 0; j < vadj.size(); j++)
         {
-            pair_info = (*vadj)[j];
-            nid2 = pair_info.first;
+            pair_info = vadj[j];
+            nid2 = pair_info.x;
             edge_label = pair_info.second;
             drain_node = find_in_occ(nid2, occ1);
             //if node2 is already in the pattern, drain_node=node id in the pattern
@@ -413,7 +346,7 @@ bool pattern::check_embeddings(vector<graph*>& graphs)
                         continue;
                     if (x != y && matrix[x][y] != 0)
                     {
-                        if (!find_edge(occ1[y], matrix[x][y], *(graphs[gid]->adjList[occ1[x]])))
+                        if (!find_edge(occ1[y], matrix[x][y], (graphs[gid]->adjList[occ1[x]])))
                             return false;
                     }
                 }

@@ -1,10 +1,3 @@
-/* 
- * File:   feature.cpp
- * Author: njin
- * 
- * Created on October 10, 2009, 7:37 PM
- */
-
 #include "feature.h"
 
 //constructor; uses one pattern as a feature
@@ -17,7 +10,3 @@ feature::feature(pattern* p)
     this->score_precise = p->score_precise;
     this->size = p->size;
 }
-
-
-
-
