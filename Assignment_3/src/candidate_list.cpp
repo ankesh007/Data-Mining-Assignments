@@ -1,23 +1,10 @@
-/* 
- * File:   candidate_list.cpp
- * Author: njin
- * 
- * Created on October 10, 2009, 7:22 PM
- */
-
 #include "candidate_list.h"
 
-//constructor
-//initializes the size of the candidate list as 0
-//initializes the sum of scores as 0
 candidate_list::candidate_list()
 {
     score_sum = 0;
-    this->length = 0;
+    length = 0;
 }
-
-//destructor
-//deletes all the candidates in this list
 candidate_list::~candidate_list()
 {
     for (int i = 0; i < data.size(); i++)
@@ -26,8 +13,6 @@ candidate_list::~candidate_list()
     }
 }
 
-//inserts a candidate subgraph pattern into the candidate list
-//returns true if the pattern is successfully inserted; false otherwise
 bool candidate_list::insert(pattern* p)
 {
 	/*if the candidate list is still empty, sets the size as specified by users

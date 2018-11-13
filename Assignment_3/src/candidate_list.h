@@ -1,14 +1,5 @@
-/* 
- * File:   candidate_list.h
- * Author: njin
- *
- * Created on October 10, 2009, 7:22 PM
- */
-
 #ifndef _CANDIDATE_LIST_H
 #define	_CANDIDATE_LIST_H
-
-extern int candidate_size;	//user-specified parameter: size of each candidate list
 
 #include "pattern.h"
 #include <vector>
