@@ -1,7 +1,7 @@
 
 positive=$1
 negative=$2
-dir=CNS
+dir=AIDS
 test_sample=$3
 
 python3 data_format.py $dir/$dir.txt $dir/ca.txt $dir/ci.txt $positive $negative
