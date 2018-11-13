@@ -1,53 +1,60 @@
-rules: 38
-size: 1 id: 0 freq: 0.277143 bg_freq: 0.0526316
+rules: 45
+size: 1 id: 0 freq: 0.274286 bg_freq: 0.0526316
 size: 1 id: 1 freq: 0.257143 bg_freq: 0.0425101
 size: 1 id: 2 freq: 0.202857 bg_freq: 0.048583
 size: 1 id: 3 freq: 0.2 bg_freq: 0.0303644
 size: 1 id: 4 freq: 0.177143 bg_freq: 0.0465587
 size: 1 id: 5 freq: 0.171429 bg_freq: 0.0161943
-size: 1 id: 6 freq: 0.274286 bg_freq: 0.048583
-size: 1 id: 7 freq: 0.265714 bg_freq: 0.0546559
-size: 1 id: 8 freq: 0.265714 bg_freq: 0.034413
-size: 1 id: 9 freq: 0.131429 bg_freq: 0.00809717
-size: 1 id: 10 freq: 0.262857 bg_freq: 0.0506073
-size: 1 id: 11 freq: 0.117143 bg_freq: 0
-size: 1 id: 12 freq: 0.205714 bg_freq: 0.0182186
-size: 1 id: 13 freq: 0.102857 bg_freq: 0
-size: 1 id: 14 freq: 0.0942857 bg_freq: 0.00202429
-size: 1 id: 15 freq: 0.0942857 bg_freq: 0.00607287
-size: 1 id: 16 freq: 0.185714 bg_freq: 0.048583
-size: 1 id: 17 freq: 0.182857 bg_freq: 0.01417
-size: 1 id: 18 freq: 0.0885714 bg_freq: 0
-size: 1 id: 19 freq: 0.174286 bg_freq: 0.048583
-size: 1 id: 20 freq: 0.168571 bg_freq: 0.0202429
-size: 1 id: 21 freq: 0.08 bg_freq: 0
-size: 1 id: 22 freq: 0.0714286 bg_freq: 0
-size: 1 id: 23 freq: 0.282857 bg_freq: 0.0425101
-size: 1 id: 24 freq: 0.0685714 bg_freq: 0.00202429
-size: 1 id: 25 freq: 0.182857 bg_freq: 0.00809717
-size: 1 id: 26 freq: 0.168571 bg_freq: 0.0242915
-size: 1 id: 27 freq: 0.0514286 bg_freq: 0.00607287
-size: 1 id: 28 freq: 0.0514286 bg_freq: 0.00607287
-size: 1 id: 29 freq: 0.0485714 bg_freq: 0.00607287
-size: 1 id: 30 freq: 0.0485714 bg_freq: 0
-size: 1 id: 31 freq: 0.0457143 bg_freq: 0
-size: 1 id: 32 freq: 0.0342857 bg_freq: 0.00607287
-size: 1 id: 33 freq: 0.0342857 bg_freq: 0.00202429
-size: 1 id: 34 freq: 0.0314286 bg_freq: 0.0121457
-size: 1 id: 35 freq: 0.0742857 bg_freq: 0.0101215
-size: 1 id: 36 freq: 0.0857143 bg_freq: 0.01417
-size: 1 id: 37 freq: 0.0114286 bg_freq: 0.00607287
+size: 1 id: 6 freq: 0.16 bg_freq: 0.0242915
+size: 1 id: 7 freq: 0.277143 bg_freq: 0.0546559
+size: 1 id: 8 freq: 0.274286 bg_freq: 0.048583
+size: 1 id: 9 freq: 0.265714 bg_freq: 0.0546559
+size: 1 id: 10 freq: 0.265714 bg_freq: 0.034413
+size: 1 id: 11 freq: 0.131429 bg_freq: 0.00809717
+size: 1 id: 12 freq: 0.128571 bg_freq: 0.0182186
+size: 1 id: 13 freq: 0.251429 bg_freq: 0.0546559
+size: 1 id: 14 freq: 0.248571 bg_freq: 0.0506073
+size: 1 id: 15 freq: 0.117143 bg_freq: 0
+size: 1 id: 16 freq: 0.105714 bg_freq: 0
+size: 1 id: 17 freq: 0.205714 bg_freq: 0.0182186
+size: 1 id: 18 freq: 0.102857 bg_freq: 0
+size: 1 id: 19 freq: 0.0942857 bg_freq: 0.00202429
+size: 1 id: 20 freq: 0.0942857 bg_freq: 0.00607287
+size: 1 id: 21 freq: 0.185714 bg_freq: 0.048583
+size: 1 id: 22 freq: 0.0885714 bg_freq: 0
+size: 1 id: 23 freq: 0.0885714 bg_freq: 0.00202429
+size: 1 id: 24 freq: 0.0857143 bg_freq: 0.0101215
+size: 1 id: 25 freq: 0.257143 bg_freq: 0.0364372
+size: 1 id: 26 freq: 0.168571 bg_freq: 0.0202429
+size: 1 id: 27 freq: 0.0771429 bg_freq: 0.00202429
+size: 1 id: 28 freq: 0.282857 bg_freq: 0.0425101
+size: 1 id: 29 freq: 0.0685714 bg_freq: 0.00202429
+size: 1 id: 30 freq: 0.182857 bg_freq: 0.0182186
+size: 1 id: 31 freq: 0.182857 bg_freq: 0.00809717
+size: 1 id: 32 freq: 0.0571429 bg_freq: 0.00202429
+size: 1 id: 33 freq: 0.168571 bg_freq: 0.0242915
+size: 1 id: 34 freq: 0.0514286 bg_freq: 0.00607287
+size: 1 id: 35 freq: 0.0514286 bg_freq: 0.00607287
+size: 1 id: 36 freq: 0.0485714 bg_freq: 0.00607287
+size: 1 id: 37 freq: 0.0485714 bg_freq: 0
+size: 1 id: 38 freq: 0.0457143 bg_freq: 0
+size: 1 id: 39 freq: 0.0342857 bg_freq: 0.00607287
+size: 1 id: 40 freq: 0.0342857 bg_freq: 0.00202429
+size: 1 id: 41 freq: 0.0314286 bg_freq: 0.0121457
+size: 1 id: 42 freq: 0.0742857 bg_freq: 0.0101215
+size: 1 id: 43 freq: 0.0857143 bg_freq: 0.01417
+size: 1 id: 44 freq: 0.0114286 bg_freq: 0.00607287
 id: 0
 adj matrix: 7
-3 1 1 0 0 0 0 
-1 4 0 1 0 0 0 
-1 0 4 0 1 0 0 
-0 1 0 3 0 1 0 
-0 0 1 0 3 0 0 
-0 0 0 1 0 2 1 
+2 2 0 0 0 0 0 
+2 3 1 1 0 0 0 
+0 1 4 0 1 0 0 
+0 1 0 4 0 0 0 
+0 0 1 0 3 1 0 
+0 0 0 0 1 2 1 
 0 0 0 0 0 1 3 
 neg_freq: 0.0526316
-pos freq: 0.277143
+pos freq: 0.274286
 id: 1
 adj matrix: 9
 3 1 1 0 0 0 0 0 0 
@@ -105,6 +112,29 @@ adj matrix: 6
 neg_freq: 0.0161943
 pos freq: 0.171429
 id: 6
+adj matrix: 9
+3 1 0 0 0 0 0 0 0 
+1 4 1 1 0 0 0 0 0 
+0 1 3 0 0 1 0 0 0 
+0 1 0 3 0 0 2 0 0 
+0 0 0 0 3 0 1 2 0 
+0 0 1 0 0 3 0 0 1 
+0 0 0 2 1 0 3 0 0 
+0 0 0 0 2 0 0 2 0 
+0 0 0 0 0 1 0 0 3 
+neg_freq: 0.0242915
+pos freq: 0.16
+id: 7
+adj matrix: 6
+3 1 1 0 0 0 
+1 4 0 1 0 0 
+1 0 4 0 1 0 
+0 1 0 3 0 1 
+0 0 1 0 3 0 
+0 0 0 1 0 2 
+neg_freq: 0.0546559
+pos freq: 0.277143
+id: 8
 adj matrix: 8
 3 1 1 0 0 0 0 0 
 1 4 0 1 1 0 0 0 
@@ -116,7 +146,7 @@ adj matrix: 8
 0 0 0 0 0 0 1 3 
 neg_freq: 0.048583
 pos freq: 0.274286
-id: 7
+id: 9
 adj matrix: 6
 3 2 0 0 0 0 
 2 3 1 0 0 0 
@@ -126,7 +156,7 @@ adj matrix: 6
 0 0 0 2 0 2 
 neg_freq: 0.0546559
 pos freq: 0.265714
-id: 8
+id: 10
 adj matrix: 9
 3 2 0 0 0 0 0 0 0 
 2 3 1 0 0 0 0 0 0 
@@ -139,7 +169,7 @@ adj matrix: 9
 0 0 0 0 0 0 0 1 3 
 neg_freq: 0.034413
 pos freq: 0.265714
-id: 9
+id: 11
 adj matrix: 6
 3 1 1 0 0 0 
 1 3 0 1 0 0 
@@ -149,18 +179,43 @@ adj matrix: 6
 0 0 0 2 0 3 
 neg_freq: 0.00809717
 pos freq: 0.131429
-id: 10
+id: 12
+adj matrix: 9
+3 0 0 1 0 0 0 0 0 
+0 4 1 0 0 0 1 0 0 
+0 1 3 2 0 0 0 0 0 
+1 0 2 3 0 0 0 1 0 
+0 0 0 0 3 1 0 0 1 
+0 0 0 0 1 3 1 0 0 
+0 1 0 0 0 1 3 0 0 
+0 0 0 1 0 0 0 3 0 
+0 0 0 0 1 0 0 0 4 
+neg_freq: 0.0182186
+pos freq: 0.128571
+id: 13
 adj matrix: 7
-3 1 1 0 0 0 0 
-1 4 0 1 0 0 0 
-1 0 3 0 2 0 0 
-0 1 0 3 0 2 0 
-0 0 2 0 3 0 1 
-0 0 0 2 0 2 0 
-0 0 0 0 1 0 4 
+3 1 0 0 0 0 0 
+1 4 0 1 1 0 0 
+0 0 4 0 0 1 0 
+0 1 0 3 0 0 0 
+0 1 0 0 3 0 2 
+0 0 1 0 0 3 1 
+0 0 0 0 2 1 3 
+neg_freq: 0.0546559
+pos freq: 0.251429
+id: 14
+adj matrix: 8
+3 1 1 0 0 0 0 0 
+1 4 0 1 0 0 0 0 
+1 0 3 0 2 0 0 0 
+0 1 0 3 0 2 0 0 
+0 0 2 0 3 0 1 0 
+0 0 0 2 0 2 0 0 
+0 0 0 0 1 0 4 1 
+0 0 0 0 0 0 1 3 
 neg_freq: 0.0506073
-pos freq: 0.262857
-id: 11
+pos freq: 0.248571
+id: 15
 adj matrix: 8
 3 1 2 0 0 0 0 0 
 1 4 0 1 0 0 0 0 
@@ -172,7 +227,21 @@ adj matrix: 8
 0 0 0 1 0 0 2 3 
 neg_freq: 0
 pos freq: 0.117143
-id: 12
+id: 16
+adj matrix: 10
+3 2 1 0 0 0 0 0 0 0 
+2 3 0 0 0 0 0 0 0 0 
+1 0 3 1 0 0 0 0 0 0 
+0 0 1 4 1 0 0 0 0 0 
+0 0 0 1 3 0 0 0 1 0 
+0 0 0 0 0 3 2 0 0 0 
+0 0 0 0 0 2 3 1 0 1 
+0 0 0 0 0 0 1 3 2 0 
+0 0 0 0 1 0 0 2 3 0 
+0 0 0 0 0 0 1 0 0 5 
+neg_freq: 0
+pos freq: 0.105714
+id: 17
 adj matrix: 5
 4 2 0 0 0 
 2 4 1 0 0 
@@ -181,14 +250,14 @@ adj matrix: 5
 0 0 0 1 3 
 neg_freq: 0.0182186
 pos freq: 0.205714
-id: 13
+id: 18
 adj matrix: 3
 3 1 0 
 1 3 2 
 0 2 1 
 neg_freq: 0
 pos freq: 0.102857
-id: 14
+id: 19
 adj matrix: 7
 3 1 0 0 0 0 0 
 1 3 0 2 1 0 0 
@@ -199,21 +268,21 @@ adj matrix: 7
 0 0 0 0 0 2 4 
 neg_freq: 0.00202429
 pos freq: 0.0942857
-id: 15
+id: 20
 adj matrix: 10
-3 2 1 0 0 0 0 0 0 0 
-2 3 0 0 0 0 0 0 0 0 
-1 0 3 0 2 0 0 0 0 0 
-0 0 0 3 0 2 1 0 0 0 
-0 0 2 0 3 1 0 1 0 0 
-0 0 0 2 1 3 0 0 1 0 
-0 0 0 1 0 0 3 0 0 0 
-0 0 0 0 1 0 0 1 0 2 
-0 0 0 0 0 1 0 0 3 0 
-0 0 0 0 0 0 0 2 0 2 
+3 1 0 0 0 0 0 0 0 0 
+1 3 0 2 0 0 0 0 0 0 
+0 0 3 0 2 1 0 0 0 0 
+0 2 0 3 1 0 1 0 0 0 
+0 0 2 1 3 0 0 1 0 0 
+0 0 1 0 0 3 0 0 2 0 
+0 0 0 1 0 0 1 0 0 2 
+0 0 0 0 1 0 0 3 0 0 
+0 0 0 0 0 2 0 0 3 0 
+0 0 0 0 0 0 2 0 0 2 
 neg_freq: 0.00607287
 pos freq: 0.0942857
-id: 16
+id: 21
 adj matrix: 7
 3 2 1 0 0 0 0 
 2 3 0 1 1 0 0 
@@ -224,21 +293,7 @@ adj matrix: 7
 0 0 0 0 0 1 4 
 neg_freq: 0.048583
 pos freq: 0.185714
-id: 17
-adj matrix: 10
-3 0 2 0 0 0 0 0 0 0 
-0 3 0 2 0 0 0 0 0 0 
-2 0 3 1 0 0 0 0 0 0 
-0 2 1 3 1 0 0 0 0 0 
-0 0 0 1 3 1 0 0 0 0 
-0 0 0 0 1 4 1 0 0 0 
-0 0 0 0 0 1 3 2 1 0 
-0 0 0 0 0 0 2 3 0 0 
-0 0 0 0 0 0 1 0 3 2 
-0 0 0 0 0 0 0 0 2 3 
-neg_freq: 0.01417
-pos freq: 0.182857
-id: 18
+id: 22
 adj matrix: 8
 3 1 1 0 0 0 0 0 
 1 3 0 0 2 0 0 0 
@@ -250,18 +305,37 @@ adj matrix: 8
 0 0 0 0 0 2 0 4 
 neg_freq: 0
 pos freq: 0.0885714
-id: 19
+id: 23
+adj matrix: 9
+3 1 0 0 0 0 0 0 0 
+1 3 1 0 0 0 0 0 0 
+0 1 3 1 0 0 0 0 0 
+0 0 1 4 1 0 0 0 0 
+0 0 0 1 3 2 0 0 0 
+0 0 0 0 2 3 1 0 0 
+0 0 0 0 0 1 3 2 0 
+0 0 0 0 0 0 2 3 1 
+0 0 0 0 0 0 0 1 5 
+neg_freq: 0.00202429
+pos freq: 0.0885714
+id: 24
+adj matrix: 2
+3 1 
+1 7 
+neg_freq: 0.0101215
+pos freq: 0.0857143
+id: 25
 adj matrix: 7
 3 1 0 0 0 0 0 
-1 4 1 1 0 0 0 
-0 1 3 0 0 0 0 
-0 1 0 3 0 2 0 
-0 0 0 0 3 1 2 
-0 0 0 2 1 3 0 
-0 0 0 0 2 0 2 
-neg_freq: 0.048583
-pos freq: 0.174286
-id: 20
+1 4 1 0 0 0 0 
+0 1 3 1 1 0 0 
+0 0 1 2 0 1 0 
+0 0 1 0 3 0 1 
+0 0 0 1 0 3 1 
+0 0 0 0 1 1 3 
+neg_freq: 0.0364372
+pos freq: 0.257143
+id: 26
 adj matrix: 8
 3 1 0 0 2 0 0 0 
 1 4 1 0 0 0 0 0 
@@ -273,30 +347,19 @@ adj matrix: 8
 0 0 0 0 0 0 1 3 
 neg_freq: 0.0202429
 pos freq: 0.168571
-id: 21
-adj matrix: 7
-2 0 1 0 0 0 0 
-0 3 2 1 0 0 0 
-1 2 3 0 0 0 0 
-0 1 0 3 1 0 0 
-0 0 0 1 4 1 0 
-0 0 0 0 1 3 2 
-0 0 0 0 0 2 3 
-neg_freq: 0
-pos freq: 0.08
-id: 22
+id: 27
 adj matrix: 8
-3 1 0 0 0 2 0 0 
-1 4 1 0 0 0 0 0 
-0 1 3 1 2 0 0 0 
-0 0 1 3 0 0 0 1 
-0 0 2 0 2 0 0 0 
-2 0 0 0 0 2 0 0 
-0 0 0 0 0 0 4 1 
-0 0 0 1 0 0 1 3 
-neg_freq: 0
-pos freq: 0.0714286
-id: 23
+4 2 0 0 0 0 0 0 
+2 4 1 0 0 0 0 0 
+0 1 3 1 0 0 0 0 
+0 0 1 3 2 0 0 0 
+0 0 0 2 3 1 0 0 
+0 0 0 0 1 3 1 0 
+0 0 0 0 0 1 3 1 
+0 0 0 0 0 0 1 3 
+neg_freq: 0.00202429
+pos freq: 0.0771429
+id: 28
 adj matrix: 8
 3 2 0 0 0 0 0 0 
 2 3 1 0 0 0 0 0 
@@ -308,7 +371,7 @@ adj matrix: 8
 0 0 0 0 0 0 1 3 
 neg_freq: 0.0425101
 pos freq: 0.282857
-id: 24
+id: 29
 adj matrix: 9
 3 2 1 0 0 0 0 0 0 
 2 3 0 1 0 0 0 0 0 
@@ -321,7 +384,20 @@ adj matrix: 9
 0 0 0 0 0 0 1 0 2 
 neg_freq: 0.00202429
 pos freq: 0.0685714
-id: 25
+id: 30
+adj matrix: 9
+3 0 2 0 0 0 0 0 0 
+0 3 1 0 0 0 0 0 0 
+2 1 3 1 0 0 0 0 0 
+0 0 1 3 1 0 0 0 0 
+0 0 0 1 4 1 0 0 0 
+0 0 0 0 1 3 2 1 0 
+0 0 0 0 0 2 3 0 0 
+0 0 0 0 0 1 0 3 2 
+0 0 0 0 0 0 0 2 3 
+neg_freq: 0.0182186
+pos freq: 0.182857
+id: 31
 adj matrix: 8
 3 1 1 0 0 0 0 0 
 1 3 0 0 2 0 0 0 
@@ -333,7 +409,18 @@ adj matrix: 8
 0 0 0 0 0 0 1 3 
 neg_freq: 0.00809717
 pos freq: 0.182857
-id: 26
+id: 32
+adj matrix: 7
+3 1 0 0 0 0 0 
+1 4 1 0 0 0 0 
+0 1 3 1 0 0 0 
+0 0 1 3 1 0 0 
+0 0 0 1 1 1 0 
+0 0 0 0 1 3 1 
+0 0 0 0 0 1 3 
+neg_freq: 0.00202429
+pos freq: 0.0571429
+id: 33
 adj matrix: 7
 2 1 0 0 0 0 0 
 1 3 1 0 0 0 0 
@@ -344,18 +431,7 @@ adj matrix: 7
 0 0 0 0 1 0 3 
 neg_freq: 0.0242915
 pos freq: 0.168571
-id: 27
-adj matrix: 7
-3 2 0 0 0 0 0 
-2 3 0 0 1 0 0 
-0 0 3 2 0 0 0 
-0 0 2 3 1 1 0 
-0 1 0 1 4 0 0 
-0 0 0 1 0 3 2 
-0 0 0 0 0 2 2 
-neg_freq: 0.00607287
-pos freq: 0.0514286
-id: 28
+id: 34
 adj matrix: 8
 3 1 0 0 0 0 0 0 
 1 4 1 0 0 0 0 0 
@@ -367,7 +443,18 @@ adj matrix: 8
 0 0 0 0 0 1 0 3 
 neg_freq: 0.00607287
 pos freq: 0.0514286
-id: 29
+id: 35
+adj matrix: 7
+3 2 0 0 0 0 0 
+2 3 0 0 1 0 0 
+0 0 3 2 0 0 0 
+0 0 2 3 1 1 0 
+0 1 0 1 4 0 0 
+0 0 0 1 0 3 2 
+0 0 0 0 0 2 2 
+neg_freq: 0.00607287
+pos freq: 0.0514286
+id: 36
 adj matrix: 9
 3 0 0 0 2 0 0 0 0 
 0 3 1 0 0 0 0 0 0 
@@ -380,7 +467,7 @@ adj matrix: 9
 0 0 0 1 0 0 0 1 3 
 neg_freq: 0.00607287
 pos freq: 0.0485714
-id: 30
+id: 37
 adj matrix: 8
 4 1 0 0 0 0 0 0 
 1 3 1 0 0 0 0 0 
@@ -392,7 +479,7 @@ adj matrix: 8
 0 0 0 0 0 1 0 2 
 neg_freq: 0
 pos freq: 0.0485714
-id: 31
+id: 38
 adj matrix: 6
 4 1 0 0 0 0 
 1 3 1 0 0 0 
@@ -402,21 +489,22 @@ adj matrix: 6
 0 0 0 0 2 3 
 neg_freq: 0
 pos freq: 0.0457143
-id: 32
-adj matrix: 10
-3 0 1 0 0 0 0 0 0 0 
-0 3 0 1 2 0 0 0 0 0 
-1 0 3 0 0 2 1 0 0 0 
-0 1 0 2 0 0 0 0 0 0 
-0 2 0 0 3 1 0 1 0 0 
-0 0 2 0 1 3 0 0 0 0 
-0 0 1 0 0 0 3 0 0 0 
-0 0 0 0 1 0 0 3 2 1 
-0 0 0 0 0 0 0 2 2 0 
-0 0 0 0 0 0 0 1 0 2 
+id: 39
+adj matrix: 11
+3 2 1 0 0 0 0 0 0 0 0 
+2 3 0 0 0 0 0 0 0 0 0 
+1 0 3 0 1 2 0 0 0 0 0 
+0 0 0 3 0 0 2 1 0 0 0 
+0 0 1 0 2 0 0 0 0 0 0 
+0 0 2 0 0 3 1 0 1 0 0 
+0 0 0 2 0 1 3 0 0 0 0 
+0 0 0 1 0 0 0 3 0 0 0 
+0 0 0 0 0 1 0 0 3 2 1 
+0 0 0 0 0 0 0 0 2 2 0 
+0 0 0 0 0 0 0 0 1 0 2 
 neg_freq: 0.00607287
 pos freq: 0.0342857
-id: 33
+id: 40
 adj matrix: 5
 3 2 1 0 0 
 2 3 0 0 1 
@@ -425,7 +513,7 @@ adj matrix: 5
 0 1 0 0 5 
 neg_freq: 0.00202429
 pos freq: 0.0342857
-id: 34
+id: 41
 adj matrix: 7
 3 1 1 0 0 0 0 
 1 3 0 2 1 0 0 
@@ -436,7 +524,7 @@ adj matrix: 7
 0 0 0 1 0 0 1 
 neg_freq: 0.0121457
 pos freq: 0.0314286
-id: 35
+id: 42
 adj matrix: 5
 3 1 2 0 0 
 1 4 0 0 0 
@@ -445,7 +533,7 @@ adj matrix: 5
 0 0 0 2 2 
 neg_freq: 0.0101215
 pos freq: 0.0742857
-id: 36
+id: 43
 adj matrix: 5
 3 2 0 0 0 
 2 3 1 0 0 
@@ -454,7 +542,7 @@ adj matrix: 5
 0 0 0 2 3 
 neg_freq: 0.01417
 pos freq: 0.0857143
-id: 37
+id: 44
 adj matrix: 2
 3 1 
 1 16 
