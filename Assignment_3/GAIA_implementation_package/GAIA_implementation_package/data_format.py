@@ -12,6 +12,7 @@ temp_inactive_molecules = inactive_file_handle.readlines()
 
 positive_samples=int(sys.argv[4])
 shuffle(temp_inactive_molecules)
+shuffle(temp_active_molecules)
 
 active_molecules = {}
 inactive_molecules = {}
