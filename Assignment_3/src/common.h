@@ -50,8 +50,8 @@ using namespace std;
 #define M_GAIN 1    //this must be a positive number; momentum will gain so much if the unit score doesn't decrease
 #define M_LOSS 1    //this must be a positive number; momentum will lose so much if the unit score decreases
 
-extern int pos_num;	//number of positive graphs in the input
-extern int neg_num;	//number of negative graphs in the input
+extern int positive_graph_count;	//number of positive graphs in the input
+extern int negative_graph_count;	//number of negative graphs in the input
 
 #define NULLCODE "NULL"
 #define BF_SUFFIX "basicResult_file.txt"	//file name suffix of basic output files
@@ -85,8 +85,8 @@ inline float calc_score(int psup, int nsup, float size)
     float pfreq, nfreq;
     if (psup <= 0)
         return -1.0;
-    pfreq = (float)psup / (float)pos_num;
-    nfreq = (float)(nsup+1) / (float)(neg_num+1);
+    pfreq = (float)psup / (float)positive_graph_count;
+    nfreq = (float)(nsup+1) / (float)(negative_graph_count+1);
     #ifdef UNIT_SCORE
     #ifdef LOG_RATIO
     return log(pfreq/nfreq) / size;
@@ -115,10 +115,10 @@ inline float calc_score(int psup, int nsup, float size)
 }
 
 /*calculate the intersection vector of two vectors*/
-inline vector<short>* intersect_vshort(vector<short>& a, vector<short>& b)
+inline vector<int>* intersect_vint(vector<int>& a, vector<int>& b)
 {
-    vector<short>* c = new vector<short>;
-    vector<short>::iterator ait, bit;
+    vector<int>* c = new vector<int>;
+    vector<int>::iterator ait, bit;
     ait = a.begin();
     bit = b.begin();
     while (ait != a.end() && bit != b.end())

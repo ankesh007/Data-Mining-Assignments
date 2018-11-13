@@ -19,8 +19,8 @@
 #include <map>
 using namespace std;
 
-extern int pos_num; //number of positive graphs
-extern int neg_num; //number of negative graphs
+extern int positive_graph_count; //number of positive graphs
+extern int negative_graph_count; //number of negative graphs
 extern int iter_num;    //number of iterations
 extern double bg_freq_threshold;    //negative frequency threshold; not used
 extern int max_size;    //maximal sizes of patterns
@@ -52,8 +52,8 @@ public:
 														 normalized accuracy*/
     
 	//output resulting feature subgraph patterns to a file
-    void fout_feature_matrix(vector<short>& code, short size, ofstream& fout);
-    void fout_feature_matrix(short gid, ofstream& fout);
+    void fout_feature_matrix(vector<int>& code, int size, ofstream& fout);
+    void fout_feature_matrix(int gid, ofstream& fout);
     void fout_feature_matrix(feature* f, ofstream& fout);
     void fout_basic_result();
     void fout_features();
@@ -67,7 +67,7 @@ public:
                                           it also updates features*/
     
 	/*insert an edge into the edge index*/
-	void insert_edge(int gid, short n1, short n2, short l1, short l2, short le);
+	void insert_edge(int gid, int n1, int n2, int l1, int l2, int le);
     
     void init_edges();  //initialize edge index
 						/*codes for edges are not calculated because a pattern will

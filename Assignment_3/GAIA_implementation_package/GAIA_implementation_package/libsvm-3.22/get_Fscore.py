@@ -1,6 +1,6 @@
 import numpy as np
-
-tot=144
+import sys
+tot=int(sys.argv[1])
 a=np.genfromtxt('./pred.txt')
 b=np.ones((tot))
 b[tot//2:]*=-1

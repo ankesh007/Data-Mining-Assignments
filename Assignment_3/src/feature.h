@@ -15,13 +15,13 @@
  including code, score, size, positive gids and negative gids*/
 class feature {
 public:
-    vector<short> code; //code of a feature if it has only one pattern
-    vector<vector<short>*> codes;   /*if a feature has more than one pattern,
+    vector<int> code; //code of a feature if it has only one pattern
+    vector<vector<int>*> codes;   /*if a feature has more than one pattern,
                                      its code is a vector of codes of its member patterns;
 									 currently not used*/
-    int size;				//number of nodes
-    vector<short> pgids;    //IDs of the supporting positive graphs
-    vector<short> ngids;    //IDs of the supporting negative graphs
+    int size;				//number of labels
+    vector<int> pgids;    //IDs of the supporting positive graphs
+    vector<int> ngids;    //IDs of the supporting negative graphs
     float score_binned;     //discretized score
     float score_precise;    //accurate score
 

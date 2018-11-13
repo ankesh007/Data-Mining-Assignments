@@ -11,8 +11,9 @@ inactive_file_handle = open(sys.argv[3],"r")
 temp_inactive_molecules = inactive_file_handle.readlines()
 
 positive_samples=int(sys.argv[4])
+negative_samples=int(sys.argv[5])
 shuffle(temp_inactive_molecules)
-shuffle(temp_active_molecules)
+# shuffle(temp_active_molecules)
 
 active_molecules = {}
 inactive_molecules = {}
@@ -36,6 +37,9 @@ vertices_list = [[],[]]
 edges_list = [[],[]]
 
 while line<total_lines:
+    if(lines[line]=="\n"):
+        line+=1
+        continue
     graph_id = int(lines[line][1:-1])
     line = line + 1
     total_vertices  = int(lines[line][:-1])
@@ -95,13 +99,15 @@ for i in range(positive_samples):
 
 print(counter_vertex)
 
-for i in range(positive_samples):
+# negative_samples=len(vertices_list[0])-(total-positive_samples)
+
+for i in range(negative_samples):
     counter_vertex+=1
     for vertex in vertices_list[0][i]:
         node_f.write('v '+str(counter_vertex)+' '+vertex)
         node_f.write('\n')
 
-for i in range(positive_samples):
+for i in range(negative_samples):
     counter_edge+=1
     for edge in edges_list[0][i]:
         edge_f.write('v '+str(counter_edge)+' '+edge)
@@ -125,13 +131,14 @@ for i in range(positive_samples,total):
         edge_f.write('\n')
 print(counter_vertex)
 
-for i in range(positive_samples,total):
+new_upp=negative_samples+total-positive_samples
+for i in range(negative_samples,new_upp):
     counter_vertex += 1
     for vertex in vertices_list[0][i]:
         node_f.write('v '+str(counter_vertex)+' '+vertex)
         node_f.write('\n')
 
-for i in range(positive_samples,total):
+for i in range(negative_samples,new_upp):
     counter_edge += 1
     for edge in edges_list[0][i]:
         edge_f.write('v '+str(counter_edge)+' '+edge)

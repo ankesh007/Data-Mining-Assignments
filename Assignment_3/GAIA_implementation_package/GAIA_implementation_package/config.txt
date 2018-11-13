@@ -1,2 +1,2 @@
-Positive: 350
-Test Sample: 144
+Positive: 450
+Test Sample: 232

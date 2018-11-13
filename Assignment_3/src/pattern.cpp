@@ -1,12 +1,4 @@
-/* 
- * File:   pattern.cpp
- * Author: njin
- * 
- * Created on October 10, 2009, 7:05 PM
- */
-
-#include <map>
-
+#include <bits/stdc++.h>
 #include "pattern.h"
 
 extern double pfreq_threshold;	//global variable: positive frequency threshold
@@ -44,9 +36,7 @@ void pattern::cout_code()
 //constructor of class pattern
 pattern::pattern()
 {
-#ifdef MOMENTUM
     this->momentum = 0;
-#endif
     this->code.clear();
     this->score_precise = 0.0;
     this->score_binned = 0;
@@ -69,18 +59,14 @@ pattern::~pattern()
     }
 }
 
-//generate new subgraph patterns based on all possible extensions
-//returns the vector of new subgraph patterns
 vector<pattern*>* pattern::extend(vector<graph*>& graphs, pattern_index& pat_idx)
 {
-    #ifdef DEAD_NODE
-    for (int i = 0; i < size; i++)
-        is_alive.push_back(false);
-    #endif
-    vector<pattern*>* res = new vector<pattern*>;
+    is_alive.resize(size);
+    vector<pattern*>* extended_patterns = new vector<pattern*>;
+
     for (int i = 0; i < this->embeddings.size(); i++)
     {
-        short gid = embeddings[i].first;
+        int gid = embeddings[i].first;
         vector<occ*>& voccs = *(embeddings[i].second);
         for (int j = 0; j < voccs.size(); j++)
             this->collect_ext(gid, i, *(voccs[j]), j, graphs);
@@ -92,17 +78,11 @@ vector<pattern*>* pattern::extend(vector<graph*>& graphs, pattern_index& pat_idx
         delete mit->second;
         if (p != NULL)
         {
-            //checking the correctness of the embeddings of p
-            #ifdef CHECK_EMBEDDING
-            if (!p->check_embeddings(graphs))
-                cout<<"embedding error!"<<p->size<<endl;
-            #endif
-            //end of checking
-            res->push_back(p);
+            extended_patterns->push_back(p);
         }
     }
     
-    return res;
+    return extended_patterns;
 }
 
 //generate a new pattern based on the extension
@@ -118,7 +98,7 @@ pattern* pattern::gen_new_pattern(extension& ext, int code,
     res->pgids = ext.pgids;
     res->ngids = ext.ngids;
     #ifdef MIN_FREQUENCY_EXTENSION
-    float pfreq = (float)(res->pgids.size()) / (float)pos_num;
+    float pfreq = (float)(res->pgids.size()) / (float)positive_graph_count;
     if (pfreq < pfreq_threshold)
     {
         res->size = 0;
@@ -190,9 +170,9 @@ pattern* pattern::gen_new_pattern(extension& ext, int code,
     //do the following only if the score increases
 
     //generating the matrix
-    res->matrix = new short*[res->size];
+    res->matrix = new int*[res->size];
     for (int i = 0; i < res->size; i++)
-        res->matrix[i] = new short[res->size];
+        res->matrix[i] = new int[res->size];
     for (int i = 0; i < this->size; i++)
         for (int j = 0; j < this->size; j++)
             res->matrix[i][j] = this->matrix[i][j];
@@ -219,9 +199,9 @@ pattern* pattern::gen_new_pattern(extension& ext, int code,
     for (int i = 0; i < ext.ext_occs.size(); i++)
     {
         ext_occ* eop = ext.ext_occs[i];
-        short gid = embeddings[eop->par_em_gid].first;
-        short poid = eop->par_occ_id;
-        short nid2 = eop->drain;
+        int gid = embeddings[eop->par_em_gid].first;
+        int poid = eop->par_occ_id;
+        int nid2 = eop->drain;
         vector<occ*>* voccs;
         if (res->embeddings.size() == 0
                 || res->embeddings[res->embeddings.size()-1].first < gid)
@@ -238,7 +218,7 @@ pattern* pattern::gen_new_pattern(extension& ext, int code,
                 pat_idx.insert(res->code);
             }
             voccs = new vector<occ*>;
-            res->embeddings.push_back(pair<short,vector<occ*>*>(gid, voccs));
+            res->embeddings.push_back(pair<int,vector<occ*>*>(gid, voccs));
         }
         //new pattern's current occs is voccs
         else
@@ -252,7 +232,7 @@ pattern* pattern::gen_new_pattern(extension& ext, int code,
         {
             nocc->push_back(nid2);
             #ifdef CHECK_EMBEDDING
-            if (graphs[gid]->nodes[nid2] != drain)
+            if (graphs[gid]->labels[nid2] != drain)
                 cout<<"embedding error in gen_new_pattern"<<endl;
             #endif
         }
@@ -263,7 +243,7 @@ pattern* pattern::gen_new_pattern(extension& ext, int code,
 }
 
 //find the subscript of a given id in a given occurrence
-int find_in_occ(short id, occ& occ1)
+int find_in_occ(int id, occ& occ1)
 {
     for (int i = 0; i < occ1.size(); i++)
         if (id == occ1[i])
@@ -272,15 +252,15 @@ int find_in_occ(short id, occ& occ1)
 }
 
 //find all possible extensions
-void pattern::collect_ext(short gid, short par_em_gid, occ& occ1, short occ1_id, vector<graph*>& graphs)
+void pattern::collect_ext(int gid, int par_em_gid, occ& occ1, int occ1_id, vector<graph*>& graphs)
 {
-    bool is_pos = gid < pos_num;
+    bool is_pos = gid < positive_graph_count;
     bool is_internal;
     map<int, extension*>::iterator mit;
-    short nid1, nid2;
-    short edge_label, drain_node;
-    pair<short, short> pair_info;
-    vector<pair<short, short> >* vadj;
+    int nid1, nid2;
+    int edge_label, drain_node;
+    pair<int, int> pair_info;
+    vector<pair<int, int> >* vadj;
 
     for (int i = 0; i < occ1.size(); i++)
     {
@@ -312,7 +292,7 @@ void pattern::collect_ext(short gid, short par_em_gid, occ& occ1, short occ1_id,
 
             if (!is_internal)    //if node2 is not in the pattern, drain_node = node label
             {
-                drain_node = graphs[gid]->nodes[nid2];
+                drain_node = graphs[gid]->labels[nid2];
             }
             int code = EXTCODE(is_internal, i, edge_label, drain_node);
             mit = this->extensions.find(code);
@@ -340,7 +320,7 @@ void pattern::collect_ext(short gid, short par_em_gid, occ& occ1, short occ1_id,
             mit->second->ext_occs.push_back(eop);
             #ifdef CHECK_EMBEDDING
             drain_node = EXTDRAIN(mit->first);
-            if (!is_internal && graphs[embeddings[eop->par_em_gid].first]->nodes[eop->drain] != drain_node)
+            if (!is_internal && graphs[embeddings[eop->par_em_gid].first]->labels[eop->drain] != drain_node)
                 cout<<"error in collecting extension occurrences"<<endl;
             #endif
             #ifdef DEAD_NODE
@@ -362,13 +342,13 @@ bool lt_occ(occ& v1, occ& v2)
 }
 
 //generate the code of this pattern
-vector<short> pattern::gen_code()
+vector<int> pattern::gen_code()
 {
     if (!this->code.empty())
         return code;
     occ min_occ;
     occ tmp;
-    map<short, short> gnid2pnid;
+    map<int, int> gnid2pnid;
     for (int i = 0; i < this->size; i++)
         min_occ.push_back(SHRT_MAX);
     vector<occ*>::iterator vit;
@@ -386,7 +366,7 @@ vector<short> pattern::gen_code()
                 gnid2pnid[(*(*vit))[i]] = i;
         }
     }
-    vector<short> n2o;
+    vector<int> n2o;
     for (int i = 0; i < min_occ.size(); i++)
         n2o.push_back(gnid2pnid[min_occ[i]]);
     int cur = 0;
@@ -402,57 +382,11 @@ vector<short> pattern::gen_code()
     return code;
 }
 
-int correct_size(vector<short> &ngids)
-{
-    int coun=0;
-    int x=ngids.size();
-    for(int i=0;i<x;i++)
-        if(ngids[i]<pos_num+neg_num)
-            coun++;
-    return coun;
-}
-
-//calculate score
-void pattern::get_score()
-{
-    this->score_precise = calc_score(pgids.size(), correct_size(ngids), edge_size);
-#ifdef TOTAL_SCORE
-    #ifdef LOG_RATIO
-    this->score_binned = (int)(score_precise*10.0) + 1;
-    #endif
-    #ifdef LOG_ODDS_RATIO
-    this->score_binned = (int)(score_precise) + 1;
-    #endif
-    #ifdef RATIO
-    this->score_binned = (int)(score_precise) + 1;
-    #endif
-    #ifdef GTEST
-    this->score_binned = (int)(score_precise*10.0) + 1;
-    #endif
-#endif
-#ifdef UNIT_SCORE
-    #ifdef LOG_RATIO
-    this->score_binned = (int)(score_precise*10.0) + 1;
-    #endif
-    #ifdef LOG_ODDS_RATIO
-    this->score_binned = (int)(score_precise) + 1;  
-    #endif
-    #ifdef RATIO
-    this->score_binned = (int)(score_precise) + 1;
-    #endif
-    #ifdef GTEST
-    this->score_binned = (int)(score_precise*10.0) + 1;
-    #endif
-#endif
-    if (score_binned < 0)
-        score_binned = 0;
-}
-
 //look for a certain edge extension in a vector of edge extensions
 /*only the edge information needs to be checked; the node label
  of nid2 is checked when checking the matrix entry [nid2][nid2];
  edge label cannot be zero here*/
-bool find_edge(short nid2, short elabel, vector<pair<short, short> >& vadj)
+bool find_edge(int nid2, int elabel, vector<pair<int, int> >& vadj)
 {
     for (int i = 0; i < vadj.size(); i++)
         if (vadj[i].first == nid2 && vadj[i].second == elabel)
@@ -465,7 +399,7 @@ bool pattern::check_embeddings(vector<graph*>& graphs)
 {
     for (int i = 0; i < embeddings.size(); i++)
     {
-        short gid = embeddings[i].first;
+        int gid = embeddings[i].first;
         vector<occ*>& vocc = *(embeddings[i].second);
         for (int j = 0; j < vocc.size(); j++)
         {
@@ -473,7 +407,7 @@ bool pattern::check_embeddings(vector<graph*>& graphs)
             for (int x = 0; x < size; x++)
                 for (int y = 0; y <= x; y++)
                 {
-                    if (y == x && matrix[x][y] != graphs[gid]->nodes[occ1[x]])
+                    if (y == x && matrix[x][y] != graphs[gid]->labels[occ1[x]])
                         return false;
                     if (y != x && matrix[x][y] == 0)
                         continue;

@@ -8,13 +8,13 @@
 #include "pattern_index.h"
 
 /*insert a code "s" into "data"*/
-void pattern_index::insert(vector<short>& s)
+void pattern_index::insert(vector<int>& s)
 {
     this->data.insert(s);
 }
 
 /*find out if code "s" is already in "data"*/
-bool pattern_index::find(vector<short>& s)
+bool pattern_index::find(vector<int>& s)
 {
     return this->data.find(s) != this->data.end();
 }
