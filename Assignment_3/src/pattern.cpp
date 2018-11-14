@@ -1,16 +1,28 @@
-#include <bits/stdc++.h>
+/* 
+ * File:   pattern.cpp
+ * Author: njin
+ * 
+ * Created on October 10, 2009, 7:05 PM
+ */
+
+#include <map>
+
 #include "pattern.h"
 #include "declaration.h"
 
-extern double pfreq_threshold;
+extern double pfreq_threshold;	//global variable: positive frequency threshold
+extern vector<graph *> graph_database;
 extern map<vector<int>, pattern *> pattern_code;
 
+//destructor of class extension
 extension::~extension()
 {
     for (int i = 0; i < this->ext_occs.size(); i++)
         delete ext_occs[i];
 }
 
+
+//constructor of class pattern
 pattern::pattern()
 {
     this->momentum = 0;
@@ -21,26 +33,28 @@ pattern::pattern()
     has_potential = true;
 }
 
+//destructor of class pattern
 pattern::~pattern()
 {
     for (int i = 0; i < size; i++)
         delete[] matrix[i];
     if (size != 0)
         delete[] matrix;
-    for (auto itr:embeddings)
+    for (int i = 0; i < embeddings.size(); i++)
     {
-        for (int j = 0; j < (itr.second)->size(); j++)
-            delete itr.second->at(j);
-        delete itr.second;
+        for (int j = 0; j < (embeddings[i].second)->size(); j++)
+            delete embeddings[i].second->at(j);
+        delete embeddings[i].second;
     }
 }
 
+//generate new subgraph patterns based on all possible extensions
+//returns the vector of new subgraph patterns
 vector<pattern*>* pattern::extend(vector<graph*>& graphs)
 {
-    is_alive.resize(size);
-    vector<pattern*>* extended_patterns = new vector<pattern*>;
-    // cout<<"Here"<<endl;
-
+    for (int i = 0; i < size; i++)
+        is_alive.push_back(false);
+    vector<pattern*>* res = new vector<pattern*>;
     for (int i = 0; i < this->embeddings.size(); i++)
     {
         int gid = embeddings[i].first;
@@ -51,15 +65,17 @@ vector<pattern*>* pattern::extend(vector<graph*>& graphs)
     map<int, extension*>::iterator mit;
     for (mit = extensions.begin(); mit != extensions.end(); mit++)
     {
-        pattern* p = gen_new_pattern(*(mit->second), mit->first, graphs);
+        pattern* p = gen_new_pattern(*(mit->second), mit->first, graph_database);
         delete mit->second;
         if (p != NULL)
         {
-            extended_patterns->push_back(p);
+            //checking the correctness of the embeddings of p
+            //end of checking
+            res->push_back(p);
         }
     }
     
-    return extended_patterns;
+    return res;
 }
 
 //generate a new pattern based on the extension
@@ -80,6 +96,7 @@ pattern* pattern::gen_new_pattern(extension& ext, int code, vector<graph*>& grap
         res->size = this->size + 1;
     res->edge_size = this->edge_size + 1;
     
+    // res->get_score();
     update_pattern_score(res);
     if (res->score_precise < this->score_precise)
     {
@@ -90,7 +107,6 @@ pattern* pattern::gen_new_pattern(extension& ext, int code, vector<graph*>& grap
 
     if (res->score_precise/(float)(res->edge_size) <
             this->score_precise / (float)(edge_size))
-    if (res->score_precise < this->score_precise)
         res->momentum = this->momentum - M_LOSS;
     else
         res->momentum = this->momentum + M_GAIN;
@@ -100,6 +116,7 @@ pattern* pattern::gen_new_pattern(extension& ext, int code, vector<graph*>& grap
         delete res;
         return NULL;
     }
+
     for (int i = 0; i < size; i++)
             dead_node[i] = !is_alive[i];
     res->dead_node = this->dead_node;
@@ -153,8 +170,8 @@ pattern* pattern::gen_new_pattern(extension& ext, int code, vector<graph*>& grap
                     res->size = 0;
                     delete res;
                     return NULL;
-                } 
-                pattern_code[res->code]=0;
+                }
+                pattern_code[(res->code)]=0;
             }
             voccs = new vector<occ*>;
             res->embeddings.push_back(pair<int,vector<occ*>*>(gid, voccs));
@@ -170,10 +187,6 @@ pattern* pattern::gen_new_pattern(extension& ext, int code, vector<graph*>& grap
         if (!ext.is_internal_ext)
         {
             nocc->push_back(nid2);
-            #ifdef CHECK_EMBEDDING
-            if (graphs[gid]->labels[nid2] != drain)
-                cout<<"embedding error in gen_new_pattern"<<endl;
-            #endif
         }
     }
 
@@ -207,12 +220,13 @@ void pattern::collect_ext(int gid, int par_em_gid, occ& occ1, int occ1_id, vecto
             continue;
         }
         nid1 = occ1[i];
-        vector<pair<int, int>> &vadj = (graphs[gid]->adjList)[nid1];
 
+        vector<pair<int, int>> &vadj = (graphs[gid]->adjList)[nid1];
+    
         for (int j = 0; j < vadj.size(); j++)
         {
-            pair_info = vadj[j];
-            nid2 = pair_info.x;
+            pair_info = (vadj)[j];
+            nid2 = pair_info.first;
             edge_label = pair_info.second;
             drain_node = find_in_occ(nid2, occ1);
             //if node2 is already in the pattern, drain_node=node id in the pattern
@@ -251,14 +265,7 @@ void pattern::collect_ext(int gid, int par_em_gid, occ& occ1, int occ1_id, vecto
             eop->drain = nid2;
             
             mit->second->ext_occs.push_back(eop);
-            #ifdef CHECK_EMBEDDING
-            drain_node = EXTDRAIN(mit->first);
-            if (!is_internal && graphs[embeddings[eop->par_em_gid].first]->labels[eop->drain] != drain_node)
-                cout<<"error in collecting extension occurrences"<<endl;
-            #endif
-            #ifdef DEAD_NODE
             is_alive[i] = true;
-            #endif
         }
     }
 }
@@ -314,6 +321,9 @@ vector<int> pattern::gen_code()
 
     return code;
 }
+
+
+//calculate score
 
 //look for a certain edge extension in a vector of edge extensions
 /*only the edge information needs to be checked; the node label

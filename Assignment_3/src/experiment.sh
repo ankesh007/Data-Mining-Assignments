@@ -9,7 +9,7 @@ rm -rf edge_file.txt
 rm -rf training.matrix
 python3 data_format.py $dir/aids.txt $dir/ca.txt $dir/ci.txt $positive $negative
 # exit(0)
-./gaia $positive 4 100 $test_sample
+./gaia $positive 2 100 $test_sample
 rm -rf $libsvm_dir/test.txt
 rm -rf $libsvm_dir/train.txt
 rm -rf $libsvm_dir/pred.txt

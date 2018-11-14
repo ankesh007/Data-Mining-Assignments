@@ -415,19 +415,42 @@ void init()
 
 void migrate(pattern *p)
 {
+    bool has_updated=false;
     if(p->score_precise>features_min_score)
     {
         for(auto itr:p->pgids)
         {
-            if(graph_features[itr]==NULL || graph_features[itr]->score_precise<p->score_precise)
-            {
-                if(graph_features[itr])
-                    delete graph_features[itr];
+            if(graph_features[itr]==NULL)
                 graph_features[itr]=new feature(p);
-                features_min_score=min(features_min_score,p->score_precise);                
+            
+            else if(p->score_precise > graph_features[itr]->score_precise)
+            {
+                has_updated=true;
+                delete graph_features[itr];
+                graph_features[itr]=new feature(p);
+            }
+            
+            // if(graph_features[itr]==NULL || graph_features[itr]->score_precise<p->score_precise)
+            // {
+            //     if(graph_features[itr])
+            //         delete graph_features[itr];
+            //     graph_features[itr]=new feature(p);
+            //     features_min_score=min(features_min_score,p->score_precise);                
+            // }
+        }
+        if(has_updated)
+        {
+            features_min_score=100;
+            for(int i=0;i<positive_graph_count;i++)
+            {
+                if(graph_features[i]==NULL)
+                    features_min_score=min(features_min_score,0.0f);
+                else
+                    features_min_score=min(features_min_score,graph_features[i]->score_precise);
             }
         }
     }
+    
     int max_possible_for_pattern=get_score(p->pgids.size(),0);
     bool has_potential=false;
     for(auto itr:p->pgids)
@@ -459,6 +482,7 @@ void migrate(pattern *p)
     {
         bool could_insert;
         could_insert = candidate_lists[min_sum_id]->insert(p);
+        cout<<min_sum_id<<" "<<"insertedhere"<<endl;
         if(!could_insert) 
             delete p;
     }
@@ -466,12 +490,17 @@ void migrate(pattern *p)
 bool has_potential_pre(pattern *p,float max_pattern_score)
 {
     // cout<<"has_potenz"<<endl;
+    int i=0;
     for (auto itr:p->pgids)
     {
-        if (max_pattern_score > graph_features[itr]->score_precise)
+        if (max_pattern_score > graph_features[i++]->score_precise)
             return true;
     }
     return false;
+}
+void print_pattern(pattern *p)
+{
+    cout << p->pgids.size() << " " << p->ngids.size() << " " << p->score_precise << " " << p->score_binned << endl;
 }
 
 void evolve()
@@ -506,9 +535,17 @@ void evolve()
             delete sampled_pattern;
             continue;
         }
+        cout<<"We got from candidate List"<<endl;
         cout<<i<<" "<<"Passed manytests"<<endl;
+        print_pattern(sampled_pattern);
         vector<pattern *> *new_patterns = sampled_pattern->extend(graph_database);
         cout<<new_patterns->size()<<endl;
+        for(auto itr=new_patterns->begin();itr!=new_patterns->end();itr++)
+        {
+            auto itr2=*itr;
+            print_pattern(itr2);
+            // cout<<itr2->pgids.size()<<" "<<itr2->ngids.size()<<" "<<itr2->score_precise<<" "<<itr2->score_binned<<endl;
+        }
         delete sampled_pattern;
         for (auto itr = new_patterns->begin(); itr != new_patterns->end(); itr++)
         {
@@ -525,17 +562,32 @@ void pattern_evolution()
     for(auto itr:edge_code)
     {
         update_pattern_score(itr.y);
-        migrate(itr.y);
+        if(itr.y->score_precise>0)
+            migrate(itr.y);
     }
+    // for (int i = 0; i < positive_graph_count; i++)
+    // {
+    //     for (int j = 0; j < candidate_lists[i]->length;j++)
+    //     {
+    //         cout << candidate_lists[i]->data[j]->pgids.size() << " " << candidate_lists[i]->data[j]->ngids.size() << " " << candidate_lists[i]->data[j]->score_precise << " " << candidate_lists[i]->data[j]->score_binned<<endl;
+    //         // for(auto itr:candidate_lists[i]->data[j]->pgids)
+    //         //     cout<<itr<<" ";
+    //         // cout<<endl;
+    //         // for (auto itr : candidate_lists[i]->data[j]->ngids)
+    //         //     cout << itr << " ";
+    //         // cout<<endl;
+    //     }
+    // }
+    // exit(0);
     // cout<<"Here"<<endl;
-    
+
     while(iter_num--)
     {
         cout<<"Evolution:"<<iter_num<<endl;
-        for(int i=0;i<positive_graph_count;i++)
-        {
-            cout<<i<<" "<<candidate_lists[i]->length<<endl;
-        }
+        // for(int i=0;i<positive_graph_count;i++)
+        // {
+        //     cout<<i<<" "<<candidate_lists[i]->length<<endl;
+        // }
     
         bool flag=true;
         for(auto itr:candidate_lists)
