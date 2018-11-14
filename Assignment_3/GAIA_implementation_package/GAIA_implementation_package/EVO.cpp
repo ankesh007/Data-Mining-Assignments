@@ -350,11 +350,14 @@ EVO::EVO(string fprefix) {
 
     if (!read_graphs())
         return;
+    cout<<"Edge Database****"<<edges.size()<<endl;
 
     init_edges();
 
     for (int i = 0; i < iter_num; i++)
     {
+        // for(int j=0;j<pos_num;j++)
+        //     cout<<j<<" "<<this->candidate_lists[j]->length<<endl;
         evolution();
     }
     cout<<"time elapsed: "<<((double)clock()/(double)1000000.0)<<" seconds"<<endl;
@@ -456,6 +459,10 @@ bool EVO::read_graphs()
 
 //destructor
 EVO::~EVO() {
+}
+void print_pattern(pattern *p)
+{
+    cout << p->pgids.size() << " " << p->ngids.size() << " " << p->score_precise << " " << p->score_binned << endl;
 }
 
 /*insert an edge into the edge index*/
@@ -620,6 +627,8 @@ bool EVO::distribute_pattern(pattern* p)
     if (min_score_sum_id >= 0)
     {
         res = this->candidate_lists[min_score_sum_id]->insert(p);
+        cout<<min_score_sum_id<<" "<<"insertedhere"<<endl;
+
         if (!res)
             delete p;
     }
@@ -734,7 +743,18 @@ void EVO::pick_one_grow(int gid)
         return;
     }
 #endif
+
+    cout<<gid<<" "<<"Passed Tests"<<endl;
+    print_pattern(seed_pattern);
     vector<pattern*>* new_patterns = seed_pattern->extend(graphs, pat_idx);
+    cout<<new_patterns->size()<<endl;
+    for(vector<pattern*>::iterator itr=new_patterns->begin();itr!=new_patterns->end();itr++)
+    {
+        // auto itr2=*itr;
+        print_pattern(*itr);
+        // cout<<(*itr)->pgids.size()<<" "<<(*itr)->ngids.size()<<" "<<(*itr)->score_precise<<" "<<(*itr)->score_binned<<endl;
+    }
+
     delete seed_pattern;
     vector<pattern*>::iterator vit;
     for (vit = new_patterns->begin(); vit != new_patterns->end(); vit++)
@@ -765,12 +785,29 @@ void EVO::evolution()
     for (int i = 0; i < pos_num; i++)
         feature_updated[i] = false;
     #endif
+    // for (int i = 0; i < pos_num; i++)
+    // {
+    //     for (int j = 0; j < this->candidate_lists[i]->length;j++)
+    //     {
+    //         cout << this->candidate_lists[i]->data[j]->pgids.size() << " " << this->candidate_lists[i]->data[j]->ngids.size() << " " << this->candidate_lists[i]->data[j]->score_precise << " " << this->candidate_lists[i]->data[j]->score_binned<<endl;
+    //         // for(auto itr:candidate_lists[i]->data[j]->pgids)
+    //         //     cout<<itr<<" ";
+    //         // cout<<endl;
+    //         // for (auto itr : candidate_lists[i]->data[j]->ngids)
+    //         //     cout << itr << " ";
+    //         // cout<<endl;
+    //     }
+    // }
+    // exit(0);
+
     for (int i = 0; i < pos_num; i++)
     {
         #ifdef ECONOMIC_PICK_GROW
         if (feature_updated[i])
             continue;
         #endif
+        cout<<"Picking and growing"<<i<<endl;
+        cout<<"Candidate List Size "<<candidate_lists[i]->length<<endl;
         pick_one_grow(i);
     }
 }
