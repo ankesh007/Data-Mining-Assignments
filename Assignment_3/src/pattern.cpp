@@ -39,7 +39,7 @@ vector<pattern*>* pattern::extend(vector<graph*>& graphs)
 {
     is_alive.resize(size);
     vector<pattern*>* extended_patterns = new vector<pattern*>;
-    cout<<"Here"<<endl;
+    // cout<<"Here"<<endl;
 
     for (int i = 0; i < this->embeddings.size(); i++)
     {

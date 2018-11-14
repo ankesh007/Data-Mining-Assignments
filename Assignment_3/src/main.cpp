@@ -275,8 +275,8 @@ void fout_training_matrix()
     ofstream out(fname.c_str());
     map<vector<int>,pattern *> tmp_idx;
     vector<feature*> features;
-    cout<<graph_database.size()<<"****"<<graph_features.size()<<endl;
-    cout<<graph_features.size()<<endl;
+    // cout<<graph_database.size()<<"****"<<graph_features.size()<<endl;
+    // cout<<graph_features.size()<<endl;
 
     for (int i = 0; i < graph_features.size(); i++)
     {
@@ -478,18 +478,17 @@ void evolve()
 {
     for(int i=0;i<positive_graph_count;i++)
     {
-        cout<<i<<endl;
         pattern *sampled_pattern=candidate_lists[i]->select_extension();
         if (sampled_pattern == NULL)
-            return;
-        cout<<sampled_pattern<<endl;
+            continue;
+        // cout<<"Not NULL"<<endl;
         // cout<<"Seleceted Ext"<<endl;
 
         if(sampled_pattern->ngids.size()==0 || sampled_pattern->size>=max_size)
         {
             // cout<<"Reached =in"<<endl;
             delete sampled_pattern;
-            return;
+            continue;
         }
         // cout<<"After Selected"<<endl;
 
@@ -500,23 +499,20 @@ void evolve()
         if (best_score_peredge<cur_score_peredge && sampled_pattern->momentum==0)
         {
             delete sampled_pattern;
-            return;
+            continue;
         }
         if(!has_potential_pre(sampled_pattern,max_pattern_score)|| !sampled_pattern->has_potential)
         {
             delete sampled_pattern;
-            return;
+            continue;
         }
-        // cout<<"Bef"<<endl;
+        cout<<i<<" "<<"Passed manytests"<<endl;
         vector<pattern *> *new_patterns = sampled_pattern->extend(graph_database);
-        // cout<<"Extending"<<endl;
+        cout<<new_patterns->size()<<endl;
         delete sampled_pattern;
-        // vector<pattern *>::iterator vit;
         for (auto itr = new_patterns->begin(); itr != new_patterns->end(); itr++)
         {
-            // cout<<"migrate"<<endl;
             migrate(*itr);
-
         }
     }   
 }
@@ -536,6 +532,11 @@ void pattern_evolution()
     while(iter_num--)
     {
         cout<<"Evolution:"<<iter_num<<endl;
+        for(int i=0;i<positive_graph_count;i++)
+        {
+            cout<<i<<" "<<candidate_lists[i]->length<<endl;
+        }
+    
         bool flag=true;
         for(auto itr:candidate_lists)
         {
@@ -563,6 +564,7 @@ int main(int argc, char** argv)
 
     read_graph();
     cout<<"Read Graph"<<endl;
+    cout<<positive_graph_count<<" "<<negative_graph_count<<" "<<test_samples<<endl;
     init();
     cout << "Init" << endl;
     pattern_evolution();

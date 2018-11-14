@@ -86,6 +86,8 @@ void edge_evolution(){
 
 				auto itr = edge_code.find(edgeHash);
 				bool isNewEdge = (itr == edge_code.end());
+				if(gid>=positive_graph_count)
+					continue;
 				pattern* pat;
 				if (isNewEdge){
 					pat = convertEdgeToPattern(u,v,uLabel,vLabel,edgeLabel);
