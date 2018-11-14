@@ -37,18 +37,7 @@ pattern* convertEdgeToPattern(int u,int v,int uLabel,int vLabel,int edgeLabel){
 
 void updatePatternGids(pattern *pat,int currentGid){
 	bool isPositiveGraph = currentGid < positive_graph_count;
-	if (isPositiveGraph){
-		int len = pat->pgids.size();
-		if (len==0 || pat->pgids[len-1]!= currentGid) {
-			pat->pgids.pb(currentGid);
-		}
-	}
-	else {
-		int len = pat->ngids.size();
-		if (len==0 || pat->ngids[len-1]!= currentGid) {
-			pat->ngids.pb(currentGid);
-		}
-	}
+	update_gids(isPositiveGraph,currentGid,pat->pgids,pat->ngids);
 }
 
 void updatePatternEmbeddings(pattern *pat,int gid,int u,int v)

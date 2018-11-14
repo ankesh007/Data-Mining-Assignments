@@ -1,18 +1,8 @@
-/* 
- * File:   feature.h
- * Author: njin
- *
- * Created on October 10, 2009, 7:37 PM
- */
-
 #ifndef _FEATURE_H
 #define	_FEATURE_H
 
 #include "pattern.h"
 
-//class: feature 
-/*this data structure, "feature", is used to store important information of feature patterns,
- including code, score, size, positive gids and negative gids*/
 class feature {
 public:
     vector<int> code; //code of a feature if it has only one pattern

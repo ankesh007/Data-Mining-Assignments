@@ -58,22 +58,12 @@ public:
     vector<bool> is_alive;  //labels that have new extensions
     bool has_potential;     //can still extend into larger patterns
     int momentum;			//amount of momentum left
-    map<int, extension* > extensions;	//all possible the extensions
 
 
     pattern();			//constructor
     vector<int> gen_code();   //generate the code of this pattern
-	
-    //generate a new pattern based on the extension
-    //pattern_index is the index of all existing patterns
-    pattern* gen_new_pattern(extension& ext, int code);
-    
-	//find all possible extensions
-    void collect_ext(int gid, int par_em_gid, occ& occ1, int occ1_id);
-    
-	//generate new subgraph patterns based on all possible extensions
-	//returns the vector of new subgraph patterns
-    vector<pattern*>* extend(); //this function prunes patterns that decrease in score
+    vector<pattern *> *filter_patterns(vector<pattern *> *patterns);
+    vector<pattern *> *extend_pattern();
 };
 
 #endif	/* _PATTERN_H */

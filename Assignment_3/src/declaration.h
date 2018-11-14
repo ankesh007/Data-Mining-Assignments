@@ -26,6 +26,8 @@ extern map<string, pattern *> edge_code;
 
 float get_score(int pos_graph,int neg_graph);
 void update_pattern_score(pattern *p);
+void update_gids(bool isPositiveGraph, int currentGid, vector<int> &pgids, vector<int> &ngids);
+
 // void fout_feature_matrix(vector<int> &code, int size, ofstream &fout);
 // void fout_feature_matrix(int gid, ofstream &fout);
 // void fout_feature_matrix(feature *f, ofstream &fout);

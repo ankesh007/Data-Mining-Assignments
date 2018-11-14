@@ -123,18 +123,6 @@ void fout_feature_matrix(feature* f, ofstream& fout)
         fout<<endl;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 /*select feature subgraph patterns to generate classification rules based on the selected patterns;
  normalized accuracy of the classification rules is maximized for the input graph_database*/
 void feature_selection(vector<feature*>& features)
@@ -514,7 +502,7 @@ void evolve()
             delete sampled_pattern;
             continue;
         }
-        vector<pattern *> *new_patterns = sampled_pattern->extend();
+        vector<pattern *> *new_patterns = sampled_pattern->extend_pattern();
         delete sampled_pattern;
         for (auto itr = new_patterns->begin(); itr != new_patterns->end(); itr++)
         {

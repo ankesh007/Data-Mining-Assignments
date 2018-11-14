@@ -40,3 +40,23 @@ void update_pattern_score(pattern *p)
     p->score_precise = get_score(p->pgids.size(), correct_size(p->ngids));
     p->score_binned = max(0,(int)(p->score_precise * 10.0) + 1);
 }
+
+void update_gids(bool isPositiveGraph, int currentGid,vector<int> &pgids, vector<int> &ngids)
+{
+    if (isPositiveGraph)
+    {
+        int len = pgids.size();
+        if (len == 0 || pgids[len - 1] != currentGid)
+        {
+            pgids.pb(currentGid);
+        }
+    }
+    else
+    {
+        int len = ngids.size();
+        if (len == 0 || ngids[len - 1] != currentGid)
+        {
+            ngids.pb(currentGid);
+        }
+    }
+}
