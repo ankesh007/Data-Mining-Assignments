@@ -482,7 +482,7 @@ void migrate(pattern *p)
     {
         bool could_insert;
         could_insert = candidate_lists[min_sum_id]->insert(p);
-        cout<<min_sum_id<<" "<<"insertedhere"<<endl;
+        // cout<<min_sum_id<<" "<<"insertedhere"<<endl;
         if(!could_insert) 
             delete p;
     }
@@ -535,17 +535,15 @@ void evolve()
             delete sampled_pattern;
             continue;
         }
-        cout<<"We got from candidate List"<<endl;
-        cout<<i<<" "<<"Passed manytests"<<endl;
-        print_pattern(sampled_pattern);
+        // print_pattern(sampled_pattern);
         vector<pattern *> *new_patterns = sampled_pattern->extend(graph_database);
-        cout<<new_patterns->size()<<endl;
-        for(auto itr=new_patterns->begin();itr!=new_patterns->end();itr++)
-        {
-            auto itr2=*itr;
-            print_pattern(itr2);
-            // cout<<itr2->pgids.size()<<" "<<itr2->ngids.size()<<" "<<itr2->score_precise<<" "<<itr2->score_binned<<endl;
-        }
+        // cout<<new_patterns->size()<<endl;
+        // for(auto itr=new_patterns->begin();itr!=new_patterns->end();itr++)
+        // {
+        //     auto itr2=*itr;
+        //     print_pattern(itr2);
+        //     // cout<<itr2->pgids.size()<<" "<<itr2->ngids.size()<<" "<<itr2->score_precise<<" "<<itr2->score_binned<<endl;
+        // }
         delete sampled_pattern;
         for (auto itr = new_patterns->begin(); itr != new_patterns->end(); itr++)
         {
