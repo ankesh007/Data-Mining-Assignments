@@ -4,12 +4,16 @@ test_sample=$3
 dir=$4
 libsvm_dir='../libsvm-3.22'
 
+rm -rf GAIA
+make GAIA
+echo "Compiled"
 rm -rf node_file.txt
 rm -rf edge_file.txt
 rm -rf training.matrix
 python3 data_format.py $dir/aids.txt $dir/ca.txt $dir/ci.txt $positive $negative
+echo "created files"
 # exit(0)
-./gaia $positive 2 100 $test_sample
+./GAIA $positive 2 100 $test_sample
 rm -rf $libsvm_dir/test.txt
 rm -rf $libsvm_dir/train.txt
 rm -rf $libsvm_dir/pred.txt

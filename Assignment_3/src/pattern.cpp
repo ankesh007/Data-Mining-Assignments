@@ -1,10 +1,3 @@
-/* 
- * File:   pattern.cpp
- * Author: njin
- * 
- * Created on October 10, 2009, 7:05 PM
- */
-
 #include <map>
 
 #include "pattern.h"
@@ -34,43 +27,44 @@ pattern::pattern()
 }
 
 //destructor of class pattern
-pattern::~pattern()
-{
-    for (int i = 0; i < size; i++)
-        delete[] matrix[i];
-    if (size != 0)
-        delete[] matrix;
-    for (int i = 0; i < embeddings.size(); i++)
-    {
-        for (int j = 0; j < (embeddings[i].second)->size(); j++)
-            delete embeddings[i].second->at(j);
-        delete embeddings[i].second;
-    }
-}
+// pattern::~pattern()
+// {
+//     for (int i = 0; i < size; i++)
+//         delete[] matrix[i];
+//     if (size != 0)
+//         delete[] matrix;
+//     for (int i = 0; i < embeddings.size(); i++)
+//     {
+//         for (int j = 0; j < (embeddings[i].second)->size(); j++)
+//             delete embeddings[i].second->at(j);
+//         delete embeddings[i].second;
+//     }
+// }
 
 //generate new subgraph patterns based on all possible extensions
 //returns the vector of new subgraph patterns
-vector<pattern*>* pattern::extend(vector<graph*>& graphs)
+vector<pattern*>* pattern::extend()
 {
-    for (int i = 0; i < size; i++)
-        is_alive.push_back(false);
+    is_alive.clear();
+    is_alive.resize(size);
+
     vector<pattern*>* res = new vector<pattern*>;
-    for (int i = 0; i < this->embeddings.size(); i++)
+    int i=-1;
+    for (auto itr:embeddings)
     {
-        int gid = embeddings[i].first;
-        vector<occ*>& voccs = *(embeddings[i].second);
+        i++;
+        int gid = itr.x;
+        vector<occ*>& voccs = *(itr.y);
         for (int j = 0; j < voccs.size(); j++)
-            this->collect_ext(gid, i, *(voccs[j]), j, graphs);
+            this->collect_ext(gid, i, *(voccs[j]), j);
     }
-    map<int, extension*>::iterator mit;
-    for (mit = extensions.begin(); mit != extensions.end(); mit++)
+
+    for (auto mit = extensions.begin(); mit != extensions.end(); mit++)
     {
-        pattern* p = gen_new_pattern(*(mit->second), mit->first, graph_database);
+        pattern* p = gen_new_pattern(*(mit->second), mit->first);
         delete mit->second;
         if (p != NULL)
         {
-            //checking the correctness of the embeddings of p
-            //end of checking
             res->push_back(p);
         }
     }
@@ -80,7 +74,7 @@ vector<pattern*>* pattern::extend(vector<graph*>& graphs)
 
 //generate a new pattern based on the extension
 //pattern_index is the index of all existing patterns
-pattern* pattern::gen_new_pattern(extension& ext, int code, vector<graph*>& graphs)
+pattern* pattern::gen_new_pattern(extension& ext, int code)
 {
     int source = EXTSOURCE(code);
     int drain = EXTDRAIN(code);
@@ -90,13 +84,9 @@ pattern* pattern::gen_new_pattern(extension& ext, int code, vector<graph*>& grap
     res->pgids = ext.pgids;
     res->ngids = ext.ngids;
 
-    if (ext.is_internal_ext)
-        res->size = this->size;
-    else
-        res->size = this->size + 1;
+    res->size=this->size+(!ext.is_internal_ext);
     res->edge_size = this->edge_size + 1;
     
-    // res->get_score();
     update_pattern_score(res);
     if (res->score_precise < this->score_precise)
     {
@@ -204,7 +194,7 @@ int find_in_occ(int id, occ& occ1)
 }
 
 //find all possible extensions
-void pattern::collect_ext(int gid, int par_em_gid, occ& occ1, int occ1_id, vector<graph*>& graphs)
+void pattern::collect_ext(int gid, int par_em_gid, occ& occ1, int occ1_id)
 {
     bool is_pos = gid < positive_graph_count;
     bool is_internal;
@@ -221,7 +211,7 @@ void pattern::collect_ext(int gid, int par_em_gid, occ& occ1, int occ1_id, vecto
         }
         nid1 = occ1[i];
 
-        vector<pair<int, int>> &vadj = (graphs[gid]->adjList)[nid1];
+        vector<pair<int, int>> &vadj = (graph_database[gid]->adjList)[nid1];
     
         for (int j = 0; j < vadj.size(); j++)
         {
@@ -239,7 +229,7 @@ void pattern::collect_ext(int gid, int par_em_gid, occ& occ1, int occ1_id, vecto
 
             if (!is_internal)    //if node2 is not in the pattern, drain_node = node label
             {
-                drain_node = graphs[gid]->labels[nid2];
+                drain_node = graph_database[gid]->labels[nid2];
             }
             int code = EXTCODE(is_internal, i, edge_label, drain_node);
             mit = this->extensions.find(code);
@@ -335,33 +325,5 @@ bool find_edge(int nid2, int elabel, vector<pair<int, int> >& vadj)
         if (vadj[i].first == nid2 && vadj[i].second == elabel)
             return true;
     return false;
-}
-
-//check if the embeddings of the pattern are correct
-bool pattern::check_embeddings(vector<graph*>& graphs)
-{
-    for (int i = 0; i < embeddings.size(); i++)
-    {
-        int gid = embeddings[i].first;
-        vector<occ*>& vocc = *(embeddings[i].second);
-        for (int j = 0; j < vocc.size(); j++)
-        {
-            occ& occ1 = *(vocc[j]);
-            for (int x = 0; x < size; x++)
-                for (int y = 0; y <= x; y++)
-                {
-                    if (y == x && matrix[x][y] != graphs[gid]->labels[occ1[x]])
-                        return false;
-                    if (y != x && matrix[x][y] == 0)
-                        continue;
-                    if (x != y && matrix[x][y] != 0)
-                    {
-                        if (!find_edge(occ1[y], matrix[x][y], (graphs[gid]->adjList[occ1[x]])))
-                            return false;
-                    }
-                }
-        }
-    }
-    return true;
 }
 

@@ -413,68 +413,52 @@ void init()
     }
 }
 
-void migrate(pattern *p)
+void update_feature_min_score(pattern *p,int needed)
 {
-    bool has_updated=false;
+    if(needed!=1)
+        return;
+    features_min_score=1e9;
+    for(int i=0;i<positive_graph_count;i++)
+        features_min_score = min(features_min_score, graph_features[i] == NULL ? 0 : graph_features[i]->score_precise);
+}
+
+void migrate(pattern *p)
+{    
     if(p->score_precise>features_min_score)
     {
         for(auto itr:p->pgids)
-        {
-            if(graph_features[itr]==NULL)
-                graph_features[itr]=new feature(p);
-            
-            else if(p->score_precise > graph_features[itr]->score_precise)
+        {       
+            if(graph_features[itr]==NULL || graph_features[itr]->score_precise<p->score_precise)
             {
-                has_updated=true;
-                delete graph_features[itr];
+                if(graph_features[itr])
+                    delete graph_features[itr];
                 graph_features[itr]=new feature(p);
             }
-            
-            // if(graph_features[itr]==NULL || graph_features[itr]->score_precise<p->score_precise)
-            // {
-            //     if(graph_features[itr])
-            //         delete graph_features[itr];
-            //     graph_features[itr]=new feature(p);
-            //     features_min_score=min(features_min_score,p->score_precise);                
-            // }
         }
-        if(has_updated)
-        {
-            features_min_score=100;
-            for(int i=0;i<positive_graph_count;i++)
-            {
-                if(graph_features[i]==NULL)
-                    features_min_score=min(features_min_score,0.0f);
-                else
-                    features_min_score=min(features_min_score,graph_features[i]->score_precise);
-            }
-        }
+        update_feature_min_score(p,1);
     }
     
     int max_possible_for_pattern=get_score(p->pgids.size(),0);
     bool has_potential=false;
-    for(auto itr:p->pgids)
-    {
-        if(graph_features[itr]->score_precise<max_possible_for_pattern)
-        {
-            has_potential=true;
-            break;
-        }
-    }
-    
-    p->has_potential=p->has_potential&has_potential;
-
+    float val=1e9;
     int min_sum=1e9;
     int min_sum_id=-2;
 
     for(auto itr:p->pgids)
     {
+        val = min(val, graph_features[itr]->score_precise);
         if(candidate_lists[itr]->score_sum<min_sum)
         {
             min_sum=candidate_lists[itr]->score_sum;
             min_sum_id=itr;
         }
     }
+
+    if (val < max_possible_for_pattern)
+        has_potential=true;
+
+    p->has_potential=p->has_potential&has_potential;
+
     if(min_sum_id<0)
         delete p;
     
@@ -487,9 +471,9 @@ void migrate(pattern *p)
             delete p;
     }
 }
+
 bool has_potential_pre(pattern *p,float max_pattern_score)
 {
-    // cout<<"has_potenz"<<endl;
     int i=0;
     for (auto itr:p->pgids)
     {
@@ -510,21 +494,16 @@ void evolve()
         pattern *sampled_pattern=candidate_lists[i]->select_extension();
         if (sampled_pattern == NULL)
             continue;
-        // cout<<"Not NULL"<<endl;
-        // cout<<"Seleceted Ext"<<endl;
 
         if(sampled_pattern->ngids.size()==0 || sampled_pattern->size>=max_size)
         {
-            // cout<<"Reached =in"<<endl;
             delete sampled_pattern;
             continue;
         }
-        // cout<<"After Selected"<<endl;
 
         float max_pattern_score=get_score(sampled_pattern->pgids.size(),0);
         float best_score_peredge = max_pattern_score*1.0 / (sampled_pattern->edge_size + 1);
         float cur_score_peredge = sampled_pattern->score_precise*1.0/sampled_pattern->edge_size;
-        // cout<<"Bef Comparisons"<<endl;
         if (best_score_peredge<cur_score_peredge && sampled_pattern->momentum==0)
         {
             delete sampled_pattern;
@@ -535,15 +514,7 @@ void evolve()
             delete sampled_pattern;
             continue;
         }
-        // print_pattern(sampled_pattern);
-        vector<pattern *> *new_patterns = sampled_pattern->extend(graph_database);
-        // cout<<new_patterns->size()<<endl;
-        // for(auto itr=new_patterns->begin();itr!=new_patterns->end();itr++)
-        // {
-        //     auto itr2=*itr;
-        //     print_pattern(itr2);
-        //     // cout<<itr2->pgids.size()<<" "<<itr2->ngids.size()<<" "<<itr2->score_precise<<" "<<itr2->score_binned<<endl;
-        // }
+        vector<pattern *> *new_patterns = sampled_pattern->extend();
         delete sampled_pattern;
         for (auto itr = new_patterns->begin(); itr != new_patterns->end(); itr++)
         {
@@ -563,29 +534,10 @@ void pattern_evolution()
         if(itr.y->score_precise>0)
             migrate(itr.y);
     }
-    // for (int i = 0; i < positive_graph_count; i++)
-    // {
-    //     for (int j = 0; j < candidate_lists[i]->length;j++)
-    //     {
-    //         cout << candidate_lists[i]->data[j]->pgids.size() << " " << candidate_lists[i]->data[j]->ngids.size() << " " << candidate_lists[i]->data[j]->score_precise << " " << candidate_lists[i]->data[j]->score_binned<<endl;
-    //         // for(auto itr:candidate_lists[i]->data[j]->pgids)
-    //         //     cout<<itr<<" ";
-    //         // cout<<endl;
-    //         // for (auto itr : candidate_lists[i]->data[j]->ngids)
-    //         //     cout << itr << " ";
-    //         // cout<<endl;
-    //     }
-    // }
-    // exit(0);
-    // cout<<"Here"<<endl;
 
     while(iter_num--)
     {
         cout<<"Evolution:"<<iter_num<<endl;
-        // for(int i=0;i<positive_graph_count;i++)
-        // {
-        //     cout<<i<<" "<<candidate_lists[i]->length<<endl;
-        // }
     
         bool flag=true;
         for(auto itr:candidate_lists)

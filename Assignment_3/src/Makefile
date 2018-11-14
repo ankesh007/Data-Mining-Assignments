@@ -5,8 +5,8 @@ SRCS=candidate_list.cpp edge_evolution.cpp main.cpp declaration.cpp feature.cpp 
 CC=g++
 DEBUG = -g
 INCLUDE = -I $(HEADER_DIR)
-CFLAGS = -Wall -c $(DEBUG)
-LFLAGS = -Wall $(DEBUG)
+CFLAGS = -c $(DEBUG)
+LFLAGS = $(DEBUG)
 DEPS = $(wildcard $(HEADER_DIR)/*.h)
 OBJS = $(patsubst %.cpp, $(OBJDIR)/%.o, $(SRCS))
 
