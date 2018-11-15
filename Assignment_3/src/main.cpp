@@ -86,10 +86,11 @@ void fout_training_matrix()
         for (int j = 0; j < features.size(); j++)
             if (svm_matrix[i][j])
                 out<<(j+1)<<":1 ";
-            // else
-            //     out<<(j+1)<<":0 ";
-        out<<endl;
+            else
+                out<<(j+1)<<":0 ";
+        out<<"\n";
     }
+    out.close();
 }
 
 void read_graph()
