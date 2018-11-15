@@ -2,8 +2,6 @@
 #define	DECLARATIONS_H
 
 #include <bits/stdc++.h>
-#include "graph.h"
-#include "pattern.h"
 
 using namespace std;
 
@@ -12,6 +10,9 @@ using namespace std;
 #define mp make_pair
 #define pb push_back
 char *string_to_chararr(string &s);
+
+class graph;
+class pattern;
 
 extern int positive_graph_count;
 extern int negative_graph_count;

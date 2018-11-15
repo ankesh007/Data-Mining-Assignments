@@ -1,10 +1,11 @@
 #ifndef _CANDIDATE_LIST_H
 #define	_CANDIDATE_LIST_H
 
-#include "pattern.h"
 #include <vector>
 using namespace std;
+// #include "pattern.h"
 
+class pattern;/* Forward Declaration */
 
 class candidate_list {
 public:
@@ -20,7 +21,6 @@ public:
     bool insert(pattern* p);		/*inserts a candidate subgraph pattern into the candidate list, 
 									 returns true if the pattern is successfully inserted; 
 									 false otherwise*/
-    
 	
 };
 

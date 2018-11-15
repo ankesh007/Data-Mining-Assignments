@@ -14,7 +14,7 @@ extern int positive_graph_count;
 extern int negative_graph_count;		
 
 typedef vector<int> occ;	
-							
+
 
 class pattern {
 public:

@@ -1,4 +1,5 @@
 #include "candidate_list.h"
+#include "pattern.h"
 #include "declaration.h"
 
 candidate_list::candidate_list()
