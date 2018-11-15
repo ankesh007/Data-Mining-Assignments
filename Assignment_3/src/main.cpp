@@ -32,7 +32,7 @@ vector<bool> feature_updated;
 
 void fout_training_matrix()
 {
-    string fname = "training.matrix";
+    string fname = "train_test.svm";
     ofstream out(fname.c_str());
     map<vector<int>,pattern *> tmp_idx;
     vector<feature*> features;

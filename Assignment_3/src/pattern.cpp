@@ -110,12 +110,12 @@ vector<pattern *> *pattern::filter_patterns(vector<pattern *> *patterns)
         pattern *temp = *itr;
         update_pattern_score(temp);
 
-        if ((temp)->score_precise < this->score_precise)
-        {
-            (temp)->size = 0;
-            delete temp;
-            continue;
-        }
+        // if ((temp)->score_precise < this->score_precise)
+        // {
+        //     (temp)->size = 0;
+        //     delete temp;
+        //     continue;
+        // }
 
         if (temp->score_precise / (float)(temp->edge_size) <
             this->score_precise / (float)(edge_size))

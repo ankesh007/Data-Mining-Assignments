@@ -80,7 +80,8 @@ while line<total_lines:
          edges_list[is_active].append(temp_edge)
 
 positive_samples=min(positive_samples,len(vertices_list[1]))
-print(positive_samples)
+print("positive_samples:",len(vertices_list[1]))
+print("negative_samples:",len(vertices_list[0]))
 counter_vertex=-1
 counter_edge=-1
 total=len(vertices_list[1])
@@ -97,7 +98,7 @@ for i in range(positive_samples):
         edge_f.write('v '+str(counter_edge)+' '+edge)
         edge_f.write('\n')
 
-print(counter_vertex)
+# print(counter_vertex)
 
 # negative_samples=len(vertices_list[0])-(total-positive_samples)
 
@@ -112,7 +113,7 @@ for i in range(negative_samples):
     for edge in edges_list[0][i]:
         edge_f.write('v '+str(counter_edge)+' '+edge)
         edge_f.write('\n')
-print(counter_vertex)
+# print(counter_vertex)
 
 """
 Printing Test Samples
@@ -129,7 +130,7 @@ for i in range(positive_samples,total):
     for edge in edges_list[1][i]:
         edge_f.write('v '+str(counter_edge)+' '+edge)
         edge_f.write('\n')
-print(counter_vertex)
+# print(counter_vertex)
 
 new_upp=negative_samples+total-positive_samples
 for i in range(negative_samples,new_upp):
@@ -143,7 +144,7 @@ for i in range(negative_samples,new_upp):
     for edge in edges_list[0][i]:
         edge_f.write('v '+str(counter_edge)+' '+edge)
         edge_f.write('\n')
-print(counter_vertex)
+# print(counter_vertex)
 
 reader=open('config.txt','w')
 print("Positive:",positive_samples,file=reader)
