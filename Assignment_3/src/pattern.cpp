@@ -35,6 +35,20 @@ pattern::pattern()
     has_potential = true;
 }
 
+pattern::~pattern()
+{
+    for (int i = 0; i < size; i++)
+        delete[] matrix[i];
+    if (size != 0)
+        delete[] matrix;
+    for (int i = 0; i < embeddings.size(); i++)
+    {
+        for (int j = 0; j < (embeddings[i].second)->size(); j++)
+            delete embeddings[i].second->at(j);
+        delete embeddings[i].second;
+    }
+}
+
 int find_in_occ(int id, occ& occ1)
 {
     auto itr=find(occ1.begin(),occ1.end(),id);
@@ -110,12 +124,12 @@ vector<pattern *> *pattern::filter_patterns(vector<pattern *> *patterns)
         pattern *temp = *itr;
         update_pattern_score(temp);
 
-        // if ((temp)->score_precise < this->score_precise)
-        // {
-        //     (temp)->size = 0;
-        //     delete temp;
-        //     continue;
-        // }
+        if ((temp)->score_precise < this->score_precise)
+        {
+            (temp)->size = 0;
+            delete temp;
+            continue;
+        }
 
         if (temp->score_precise / (float)(temp->edge_size) <
             this->score_precise / (float)(edge_size))

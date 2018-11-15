@@ -34,7 +34,8 @@ public:
     int momentum;			
 
 
-    pattern();			
+    pattern();
+    ~pattern();
     vector<int> gen_code();   
     vector<pattern *> *filter_patterns(vector<pattern *> *patterns);
     vector<pattern *> *extend_pattern();
