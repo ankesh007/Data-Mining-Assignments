@@ -40,20 +40,8 @@ bool candidate_list::insert(pattern* p)
     }
 }
 
-// void candidate_list::insert(vector<pattern*>* patterns)
-// {
-//     for (int i = 0; i < patterns->size(); i++)
-//         insert(patterns->at(i));
-// }
-
-/*randomly select a pattern from the candidate list and return it;
- the probability of a pattern being selected is proportional to its
- discrimination score*/
-/*the selected pattern is removed from the candidate list, the number
- of patterns and the sum of scores of this candidate list is updated*/
 pattern* candidate_list::select_extension()
 {
-	//if the candidate list is empty, return NULL
     if (length <= 0 || score_sum==0)
         return NULL;
     int i = length - 1;
@@ -73,9 +61,6 @@ pattern* candidate_list::select_extension()
     }
 
     score_sum -= data[i]->score_binned;
-    // pattern* res = data[i];
-    // pattern* tmp = data[this->length-1];
-    // data[i] = tmp;
     swap(data[i],data[this->length-1]);
     length--;
     

@@ -3,15 +3,9 @@
 #include "pattern.h"
 #include "declaration.h"
 
-extern double pfreq_threshold;	//global variable: positive frequency threshold
+extern double pfreq_threshold;	
 extern vector<graph *> graph_database;
 extern map<vector<int>, pattern *> pattern_code;
-//destructor of class extension
-extension::~extension()
-{
-    for (int i = 0; i < this->ext_occs.size(); i++)
-        delete ext_occs[i];
-}
 
 int get_source_from_hash(int hash)
 {
@@ -26,7 +20,11 @@ int get_drain_from_hash(int hash)
     return (((int)((hash))) & DRAIN_MASK);
 }
 
-//constructor of class pattern
+int get_hash_from_extension(int u,int x,int y,int z)
+{
+    return ((((int)(u)) << TYPE_SHIFT) | (((int)(x)) << SOURCE_SHIFT) | ((int)(y) << EDGE_SHIFT) | ((int)(z)));
+}
+
 pattern::pattern()
 {
     this->momentum = 0;
@@ -37,7 +35,6 @@ pattern::pattern()
     has_potential = true;
 }
 
-//find the subscript of a given id in a given occurrence
 int find_in_occ(int id, occ& occ1)
 {
     auto itr=find(occ1.begin(),occ1.end(),id);
@@ -46,10 +43,6 @@ int find_in_occ(int id, occ& occ1)
     return itr-occ1.begin();
 }
 
-int get_hash_from_extension(int u,int x,int y,int z)
-{
-    return ((((int)(u)) << TYPE_SHIFT) | (((int)(x)) << SOURCE_SHIFT) | ((int)(y) << EDGE_SHIFT) | ((int)(z)));
-}
 
 bool lt_occ(occ& v1, occ& v2)
 {
